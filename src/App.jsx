@@ -20,6 +20,28 @@ import {
   Play,
   FileVideo,
   Clapperboard,
+  Settings2,
+  ArrowLeft,
+  Users,
+  Activity,
+  Building2,
+  Newspaper,
+  Clock3,
+  AlertTriangle,
+  CheckCircle2,
+  Bot,
+  Workflow,
+  Target,
+  Mail,
+  MessageCircleWarning,
+  Siren,
+  Shield,
+  UserCog,
+  FileSearch,
+  Megaphone,
+  Download,
+  LayoutDashboard,
+  BarChart3,
 } from "lucide-react";
 
 const initialPosts = [
@@ -76,6 +98,7 @@ const initialPosts = [
     likedByMe: false,
   },
 ];
+
 const categoryStyles = {
   AI活用: "bg-fuchsia-100 text-fuchsia-700 border-fuchsia-200",
   自動化: "bg-cyan-100 text-cyan-700 border-cyan-200",
@@ -89,6 +112,75 @@ const currentUser = {
   avatar: "あ",
 };
 
+const adminMetrics = {
+  usage: {
+    activeUsers: 248,
+    activeRate: "+12% / 前週比",
+    loginsTrend: [42, 58, 61, 73, 66, 84, 91],
+    departmentUsage: [
+      { name: "営業", rate: 82, color: "bg-cyan-500" },
+      { name: "人事", rate: 68, color: "bg-fuchsia-500" },
+      { name: "経理", rate: 74, color: "bg-emerald-500" },
+      { name: "情シス", rate: 91, color: "bg-indigo-500" },
+    ],
+  },
+  content: {
+    popularArticles: [
+      { title: "社内FAQチャットボットの試作メモ", views: 542 },
+      { title: "見積作成フローを自動化して月12時間削減", views: 487 },
+      { title: "請求書チェックを半自動化したテンプレート共有", views: 361 },
+    ],
+    latestArticles: [
+      { title: "問い合わせ一次対応をAIで半自動化", date: "2026-05-19" },
+      { title: "Power Automate承認テンプレート更新版", date: "2026-05-18" },
+      { title: "動画マニュアル共有の運用ルール", date: "2026-05-17" },
+    ],
+    staleAlerts: [
+      "生成AI利用ガイドライン（最終更新 93日前）",
+      "経費精算FAQ（最終更新 67日前）",
+    ],
+    approvalPending: 7,
+  },
+  search: {
+    keywords: [
+      { word: "Power Automate", count: 128 },
+      { word: "生成AI", count: 103 },
+      { word: "経費精算", count: 76 },
+      { word: "請求書", count: 64 },
+    ],
+    noResultWords: ["Copilot Studio", "動画圧縮", "RPA申請", "議事録自動作成"],
+    categories: [
+      { name: "AI活用", views: 41 },
+      { name: "自動化", views: 33 },
+      { name: "業務改善", views: 26 },
+    ],
+  },
+  dx: {
+    aiUsageRate: 63,
+    automationCount: 47,
+    improvementCount: 28,
+    progressRate: 72,
+  },
+  support: {
+    unreadNotices: 5,
+    openInquiries: 11,
+    incidentAlerts: 1,
+  },
+  security: {
+    suspiciousLogins: 2,
+    permissionChanges: [
+      "2026-05-19 09:32 / ナレッジ管理者権限を付与",
+      "2026-05-18 17:05 / 投稿承認者を変更",
+      "2026-05-18 10:11 / 閲覧権限グループを更新",
+    ],
+    auditLogs: [
+      "CSVエクスポート実行",
+      "記事一括承認",
+      "ダッシュボード設定変更",
+    ],
+  },
+};
+
 function StatCard({ icon, label, value, sub }) {
   return (
     <div className="rounded-2xl border border-slate-200 bg-white/80 p-4 shadow-sm backdrop-blur">
@@ -99,6 +191,60 @@ function StatCard({ icon, label, value, sub }) {
           <p className="mt-1 text-xs text-slate-500">{sub}</p>
         </div>
         <div className="rounded-xl bg-slate-100 p-2 text-slate-700">{icon}</div>
+      </div>
+    </div>
+  );
+}
+
+function MetricCard({ icon, title, value, sub, accent = "from-sky-500 to-cyan-400" }) {
+  return (
+    <div className="rounded-[24px] border border-slate-200 bg-white p-4 shadow-sm">
+      <div className="flex items-start justify-between gap-3">
+        <div>
+          <p className="text-sm text-slate-500">{title}</p>
+          <p className="mt-1 text-2xl font-semibold text-slate-900">{value}</p>
+          {sub && <p className="mt-1 text-xs text-slate-500">{sub}</p>}
+        </div>
+        <div className={`rounded-2xl bg-gradient-to-br ${accent} p-3 text-white shadow`}>{icon}</div>
+      </div>
+    </div>
+  );
+}
+
+function Panel({ title, description, icon, children, actionLabel }) {
+  return (
+    <section className="rounded-[28px] border border-slate-200/70 bg-white/90 p-5 shadow-xl backdrop-blur">
+      <div className="flex items-start justify-between gap-4">
+        <div className="flex items-start gap-3">
+          <div className="rounded-2xl bg-slate-100 p-2 text-slate-700">{icon}</div>
+          <div>
+            <h3 className="text-lg font-semibold text-slate-900">{title}</h3>
+            <p className="mt-1 text-sm text-slate-500">{description}</p>
+          </div>
+        </div>
+        {actionLabel && (
+          <button
+            type="button"
+            className="rounded-2xl border border-slate-200 bg-white px-3 py-2 text-sm text-slate-600 transition hover:bg-slate-50"
+          >
+            {actionLabel}
+          </button>
+        )}
+      </div>
+      <div className="mt-5">{children}</div>
+    </section>
+  );
+}
+
+function ProgressBar({ label, value, color = "bg-sky-500" }) {
+  return (
+    <div>
+      <div className="mb-2 flex items-center justify-between text-sm">
+        <span className="text-slate-600">{label}</span>
+        <span className="font-medium text-slate-900">{value}%</span>
+      </div>
+      <div className="h-2.5 rounded-full bg-slate-100">
+        <div className={`h-2.5 rounded-full ${color}`} style={{ width: `${value}%` }} />
       </div>
     </div>
   );
@@ -210,10 +356,8 @@ function ComposerModal({
             <div className="max-h-[calc(92vh-92px)] overflow-y-auto px-6 py-6">
               <div className="mb-5 rounded-[24px] border border-slate-200 bg-slate-50 px-4 py-4 text-sm text-slate-600">
                 投稿者:{" "}
-                <span className="font-medium text-slate-900">
-                  {currentUser.name}
-                </span>{" "}
-                / {currentUser.team}
+                <span className="font-medium text-slate-900">{currentUser.name}</span> /{" "}
+                {currentUser.team}
               </div>
 
               <form onSubmit={onSubmit} className="space-y-5">
@@ -225,10 +369,7 @@ function ComposerModal({
                     <input
                       value={composer.title}
                       onChange={(e) =>
-                        setComposer((prev) => ({
-                          ...prev,
-                          title: e.target.value,
-                        }))
+                        setComposer((prev) => ({ ...prev, title: e.target.value }))
                       }
                       placeholder="例: 申請業務の自動化フロー紹介"
                       className="w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm outline-none transition focus:border-sky-400 focus:bg-white focus:ring-4 focus:ring-sky-100"
@@ -241,10 +382,7 @@ function ComposerModal({
                     <select
                       value={composer.category}
                       onChange={(e) =>
-                        setComposer((prev) => ({
-                          ...prev,
-                          category: e.target.value,
-                        }))
+                        setComposer((prev) => ({ ...prev, category: e.target.value }))
                       }
                       className="w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm outline-none transition focus:border-sky-400 focus:bg-white focus:ring-4 focus:ring-sky-100"
                     >
@@ -264,10 +402,7 @@ function ComposerModal({
                     rows={6}
                     value={composer.content}
                     onChange={(e) =>
-                      setComposer((prev) => ({
-                        ...prev,
-                        content: e.target.value,
-                      }))
+                      setComposer((prev) => ({ ...prev, content: e.target.value }))
                     }
                     placeholder="取り組み内容、使ったツール、効果、注意点などを自由に記入してください。"
                     className="w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm outline-none transition focus:border-sky-400 focus:bg-white focus:ring-4 focus:ring-sky-100"
@@ -281,10 +416,7 @@ function ComposerModal({
                   <input
                     value={composer.tags}
                     onChange={(e) =>
-                      setComposer((prev) => ({
-                        ...prev,
-                        tags: e.target.value,
-                      }))
+                      setComposer((prev) => ({ ...prev, tags: e.target.value }))
                     }
                     placeholder="例: Power Automate, 生成AI, 標準化"
                     className="w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm outline-none transition focus:border-sky-400 focus:bg-white focus:ring-4 focus:ring-sky-100"
@@ -312,8 +444,7 @@ function ComposerModal({
                         動画ファイルを選択
                       </p>
                       <p className="mt-2 text-sm text-slate-500">
-                        mp4 / mov / webm
-                        などを想定した投稿UIです（モックのため実アップロードは未接続）
+                        mp4 / mov / webm などを想定した投稿UIです（モックのため実アップロードは未接続）
                       </p>
                     </div>
                   </label>
@@ -376,6 +507,441 @@ function ComposerModal({
   );
 }
 
+function AdminDashboard({ onBack }) {
+  const { usage, content, search, dx, support, security } = adminMetrics;
+
+  return (
+    <div className="min-h-screen bg-[radial-gradient(circle_at_top_right,_rgba(59,130,246,0.12),_transparent_25%),radial-gradient(circle_at_top_left,_rgba(168,85,247,0.1),_transparent_30%),linear-gradient(to_bottom,_#f8fafc,_#eef2ff)] text-slate-900">
+      <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
+        <motion.header
+          initial={{ opacity: 0, y: 12 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="overflow-hidden rounded-[30px] border border-white/60 bg-slate-900 text-white shadow-2xl"
+        >
+          <div className="grid gap-6 p-6 md:grid-cols-[1.3fr_0.7fr] md:p-8">
+            <div>
+              <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/10 px-3 py-1 text-sm text-white/90 backdrop-blur">
+                <LayoutDashboard className="h-4 w-4" />
+                管理画面 / DXポータル運用ダッシュボード
+              </div>
+              <h1 className="mt-4 text-3xl font-semibold leading-tight md:text-5xl">
+                運用状況・KPI・
+                <span className="bg-gradient-to-r from-sky-300 to-cyan-200 bg-clip-text text-transparent">
+                  {" "}
+                  セキュリティ{" "}
+                </span>
+                を一画面で把握
+              </h1>
+              <p className="mt-4 max-w-2xl text-sm leading-6 text-slate-300 md:text-base">
+                管理メニューから遷移する管理者向けダッシュボードのモックです。利用状況、コンテンツ管理、検索分析、DX推進KPI、通知・問い合わせ、セキュリティ運用、便利機能を1画面に集約しています。
+              </p>
+              <div className="mt-6 flex flex-wrap gap-3">
+                <button
+                  type="button"
+                  onClick={onBack}
+                  className="inline-flex items-center gap-2 rounded-2xl bg-white px-4 py-3 text-sm font-medium text-slate-900 shadow-lg transition hover:translate-y-[-1px]"
+                >
+                  <ArrowLeft className="h-4 w-4" />
+                  ポータルへ戻る
+                </button>
+                <button
+                  type="button"
+                  className="inline-flex items-center gap-2 rounded-2xl border border-white/15 bg-white/10 px-4 py-3 text-sm font-medium text-white backdrop-blur transition hover:bg-white/15"
+                >
+                  <Megaphone className="h-4 w-4" />
+                  ワンクリックお知らせ投稿
+                </button>
+                <button
+                  type="button"
+                  className="inline-flex items-center gap-2 rounded-2xl border border-white/15 bg-white/10 px-4 py-3 text-sm font-medium text-white backdrop-blur transition hover:bg-white/15"
+                >
+                  <Download className="h-4 w-4" />
+                  CSVエクスポート
+                </button>
+              </div>
+            </div>
+
+            <div className="grid gap-3 self-end sm:grid-cols-3 md:grid-cols-1">
+              <MetricCard
+                icon={<Users className="h-5 w-5" />}
+                title="アクティブユーザー数"
+                value={`${usage.activeUsers}人`}
+                sub={usage.activeRate}
+                accent="from-sky-500 to-cyan-400"
+              />
+              <MetricCard
+                icon={<Target className="h-5 w-5" />}
+                title="DX施策の進捗率"
+                value={`${dx.progressRate}%`}
+                sub="今月の重点施策ベース"
+                accent="from-violet-500 to-fuchsia-500"
+              />
+              <MetricCard
+                icon={<Shield className="h-5 w-5" />}
+                title="システム障害アラート"
+                value={`${support.incidentAlerts}件`}
+                sub="要確認の障害通知"
+                accent="from-rose-500 to-orange-400"
+              />
+            </div>
+          </div>
+        </motion.header>
+
+        <div className="mt-6 grid gap-6 lg:grid-cols-2">
+          <Panel
+            title="利用状況サマリー"
+            description="アクティブユーザー、ログイン推移、部署別利用率を確認"
+            icon={<Users className="h-5 w-5" />}
+            actionLabel="詳細分析"
+          >
+            <div className="grid gap-4 md:grid-cols-2">
+              <div className="rounded-[24px] border border-slate-200 bg-slate-50 p-4">
+                <p className="text-sm text-slate-500">ログイン数推移（7日間）</p>
+                <div className="mt-4 flex h-40 items-end gap-2">
+                  {usage.loginsTrend.map((value, idx) => (
+                    <div key={idx} className="flex flex-1 flex-col items-center gap-2">
+                      <div
+                        className="w-full rounded-t-2xl bg-gradient-to-t from-sky-500 to-cyan-300"
+                        style={{ height: `${value}%` }}
+                      />
+                      <span className="text-xs text-slate-400">D{idx + 1}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+              <div className="space-y-4 rounded-[24px] border border-slate-200 bg-slate-50 p-4">
+                <div className="rounded-2xl bg-white p-4 shadow-sm">
+                  <p className="text-sm text-slate-500">アクティブユーザー数</p>
+                  <p className="mt-1 text-3xl font-semibold text-slate-900">{usage.activeUsers}人</p>
+                  <p className="mt-1 text-xs text-emerald-600">{usage.activeRate}</p>
+                </div>
+                <div>
+                  <p className="mb-3 text-sm font-medium text-slate-700">部署別利用率</p>
+                  <div className="space-y-3">
+                    {usage.departmentUsage.map((dept) => (
+                      <ProgressBar
+                        key={dept.name}
+                        label={dept.name}
+                        value={dept.rate}
+                        color={dept.color}
+                      />
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </Panel>
+
+          <Panel
+            title="コンテンツ管理状況"
+            description="人気記事、公開状況、更新アラート、承認待ちを把握"
+            icon={<Newspaper className="h-5 w-5" />}
+            actionLabel="コンテンツ一覧"
+          >
+            <div className="grid gap-4 md:grid-cols-2">
+              <div className="rounded-[24px] border border-slate-200 bg-slate-50 p-4">
+                <p className="text-sm font-medium text-slate-700">人気記事ランキング</p>
+                <div className="mt-4 space-y-3">
+                  {content.popularArticles.map((article, index) => (
+                    <div
+                      key={article.title}
+                      className="flex items-center justify-between rounded-2xl bg-white px-4 py-3 shadow-sm"
+                    >
+                      <div className="flex items-center gap-3">
+                        <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-amber-100 text-sm font-semibold text-amber-700">
+                          {index + 1}
+                        </div>
+                        <p className="text-sm font-medium text-slate-900">{article.title}</p>
+                      </div>
+                      <p className="text-xs text-slate-500">{article.views} views</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <div className="space-y-4">
+                <div className="rounded-[24px] border border-slate-200 bg-slate-50 p-4">
+                  <div className="flex items-center justify-between">
+                    <p className="text-sm font-medium text-slate-700">最近公開された記事</p>
+                    <Clock3 className="h-4 w-4 text-slate-400" />
+                  </div>
+                  <div className="mt-4 space-y-3">
+                    {content.latestArticles.map((article) => (
+                      <div
+                        key={article.title}
+                        className="rounded-2xl bg-white px-4 py-3 shadow-sm"
+                      >
+                        <p className="text-sm font-medium text-slate-900">{article.title}</p>
+                        <p className="mt-1 text-xs text-slate-500">公開日: {article.date}</p>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="grid gap-4 sm:grid-cols-2">
+                  <div className="rounded-[24px] border border-amber-200 bg-amber-50 p-4">
+                    <div className="flex items-center gap-2 text-amber-700">
+                      <AlertTriangle className="h-4 w-4" />
+                      <p className="text-sm font-medium">未更新記事アラート</p>
+                    </div>
+                    <ul className="mt-3 space-y-2 text-sm text-amber-900">
+                      {content.staleAlerts.map((item) => (
+                        <li key={item}>• {item}</li>
+                      ))}
+                    </ul>
+                  </div>
+
+                  <div className="rounded-[24px] border border-sky-200 bg-sky-50 p-4">
+                    <div className="flex items-center gap-2 text-sky-700">
+                      <CheckCircle2 className="h-4 w-4" />
+                      <p className="text-sm font-medium">承認待ち件数</p>
+                    </div>
+                    <p className="mt-4 text-3xl font-semibold text-slate-900">
+                      {content.approvalPending}件
+                    </p>
+                    <p className="mt-1 text-xs text-slate-500">本日中の確認推奨</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </Panel>
+
+          <Panel
+            title="検索・ナレッジ分析"
+            description="検索キーワード、未ヒットワード、人気カテゴリの可視化"
+            icon={<FileSearch className="h-5 w-5" />}
+            actionLabel="検索レポート"
+          >
+            <div className="grid gap-4 md:grid-cols-3">
+              <div className="rounded-[24px] border border-slate-200 bg-slate-50 p-4 md:col-span-1">
+                <p className="text-sm font-medium text-slate-700">検索キーワードランキング</p>
+                <div className="mt-4 space-y-3">
+                  {search.keywords.map((item, index) => (
+                    <div
+                      key={item.word}
+                      className="flex items-center justify-between rounded-2xl bg-white px-4 py-3 shadow-sm"
+                    >
+                      <div className="flex items-center gap-3">
+                        <span className="text-xs font-semibold text-slate-400">#{index + 1}</span>
+                        <p className="text-sm font-medium text-slate-900">{item.word}</p>
+                      </div>
+                      <p className="text-xs text-slate-500">{item.count}回</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <div className="rounded-[24px] border border-rose-200 bg-rose-50 p-4 md:col-span-1">
+                <p className="text-sm font-medium text-rose-700">
+                  「検索されたが記事がない」ワード
+                </p>
+                <div className="mt-4 flex flex-wrap gap-2">
+                  {search.noResultWords.map((word) => (
+                    <span
+                      key={word}
+                      className="rounded-full bg-white px-3 py-2 text-sm text-rose-700 shadow-sm"
+                    >
+                      {word}
+                    </span>
+                  ))}
+                </div>
+                <p className="mt-4 text-xs text-rose-700">
+                  未整備コンテンツの優先候補として活用
+                </p>
+              </div>
+
+              <div className="rounded-[24px] border border-slate-200 bg-slate-50 p-4 md:col-span-1">
+                <p className="text-sm font-medium text-slate-700">よく見られているカテゴリ</p>
+                <div className="mt-4 space-y-4">
+                  {search.categories.map((item) => (
+                    <ProgressBar
+                      key={item.name}
+                      label={item.name}
+                      value={item.views}
+                      color="bg-violet-500"
+                    />
+                  ))}
+                </div>
+              </div>
+            </div>
+          </Panel>
+
+          <Panel
+            title="DX推進KPI"
+            description="AI利用率、業務改善・自動化件数、施策進捗率の追跡"
+            icon={<Target className="h-5 w-5" />}
+            actionLabel="KPI詳細"
+          >
+            <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+              <MetricCard
+                icon={<Bot className="h-5 w-5" />}
+                title="AI利用率"
+                value={`${dx.aiUsageRate}%`}
+                sub="部門横断の平均利用率"
+                accent="from-violet-500 to-fuchsia-500"
+              />
+              <MetricCard
+                icon={<Workflow className="h-5 w-5" />}
+                title="自動化件数"
+                value={`${dx.automationCount}件`}
+                sub="今年度累計"
+                accent="from-cyan-500 to-sky-500"
+              />
+              <MetricCard
+                icon={<TrendingUp className="h-5 w-5" />}
+                title="業務改善件数"
+                value={`${dx.improvementCount}件`}
+                sub="投稿起点の改善を集計"
+                accent="from-emerald-500 to-teal-500"
+              />
+              <MetricCard
+                icon={<BarChart3 className="h-5 w-5" />}
+                title="DX施策進捗率"
+                value={`${dx.progressRate}%`}
+                sub="ロードマップ達成度"
+                accent="from-amber-500 to-orange-500"
+              />
+            </div>
+          </Panel>
+
+          <Panel
+            title="通知・問い合わせ"
+            description="未読お知らせ、問い合わせ、障害アラートを集約"
+            icon={<Mail className="h-5 w-5" />}
+            actionLabel="通知センター"
+          >
+            <div className="grid gap-4 md:grid-cols-3">
+              <MetricCard
+                icon={<Bell className="h-5 w-5" />}
+                title="未読お知らせ数"
+                value={`${support.unreadNotices}件`}
+                sub="全社向け通知を含む"
+                accent="from-sky-500 to-cyan-400"
+              />
+              <MetricCard
+                icon={<MessageCircleWarning className="h-5 w-5" />}
+                title="未対応問い合わせ件数"
+                value={`${support.openInquiries}件`}
+                sub="48時間以内対応推奨"
+                accent="from-violet-500 to-fuchsia-500"
+              />
+              <MetricCard
+                icon={<Siren className="h-5 w-5" />}
+                title="システム障害アラート"
+                value={`${support.incidentAlerts}件`}
+                sub="監視ツール連携を想定"
+                accent="from-rose-500 to-orange-400"
+              />
+            </div>
+          </Panel>
+
+          <Panel
+            title="セキュリティ・運用"
+            description="不審ログイン、権限変更履歴、監査ログ確認"
+            icon={<Shield className="h-5 w-5" />}
+            actionLabel="監査ログへ"
+          >
+            <div className="grid gap-4 md:grid-cols-3">
+              <div className="rounded-[24px] border border-rose-200 bg-rose-50 p-4">
+                <div className="flex items-center gap-2 text-rose-700">
+                  <Shield className="h-4 w-4" />
+                  <p className="text-sm font-medium">不審ログイン検知</p>
+                </div>
+                <p className="mt-4 text-3xl font-semibold text-slate-900">
+                  {security.suspiciousLogins}件
+                </p>
+                <p className="mt-1 text-xs text-slate-500">
+                  海外IPアクセス / 深夜帯アクセスを検知
+                </p>
+              </div>
+
+              <div className="rounded-[24px] border border-slate-200 bg-slate-50 p-4">
+                <div className="flex items-center gap-2 text-slate-700">
+                  <UserCog className="h-4 w-4" />
+                  <p className="text-sm font-medium">権限変更履歴</p>
+                </div>
+                <ul className="mt-4 space-y-2 text-sm text-slate-700">
+                  {security.permissionChanges.map((item) => (
+                    <li key={item} className="rounded-2xl bg-white px-3 py-2 shadow-sm">
+                      {item}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+
+              <div className="rounded-[24px] border border-slate-200 bg-slate-50 p-4">
+                <div className="flex items-center gap-2 text-slate-700">
+                  <FileSearch className="h-4 w-4" />
+                  <p className="text-sm font-medium">監査ログ確認</p>
+                </div>
+                <ul className="mt-4 space-y-2 text-sm text-slate-700">
+                  {security.auditLogs.map((item) => (
+                    <li key={item} className="rounded-2xl bg-white px-3 py-2 shadow-sm">
+                      {item}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+          </Panel>
+
+          <Panel
+            title="管理者向け便利機能"
+            description="お知らせ投稿、CSV出力、ダッシュボード設定の入口"
+            icon={<Settings2 className="h-5 w-5" />}
+            actionLabel="設定"
+          >
+            <div className="grid gap-4 md:grid-cols-3">
+              <button
+                type="button"
+                className="rounded-[24px] border border-slate-200 bg-slate-50 p-5 text-left transition hover:border-sky-300 hover:bg-sky-50/70"
+              >
+                <div className="inline-flex rounded-2xl bg-sky-100 p-3 text-sky-700">
+                  <Megaphone className="h-5 w-5" />
+                </div>
+                <p className="mt-4 text-base font-semibold text-slate-900">
+                  ワンクリックお知らせ投稿
+                </p>
+                <p className="mt-2 text-sm text-slate-500">
+                  重要なお知らせをテンプレートから即時発信
+                </p>
+              </button>
+
+              <button
+                type="button"
+                className="rounded-[24px] border border-slate-200 bg-slate-50 p-5 text-left transition hover:border-violet-300 hover:bg-violet-50/70"
+              >
+                <div className="inline-flex rounded-2xl bg-violet-100 p-3 text-violet-700">
+                  <Download className="h-5 w-5" />
+                </div>
+                <p className="mt-4 text-base font-semibold text-slate-900">CSVエクスポート</p>
+                <p className="mt-2 text-sm text-slate-500">
+                  利用状況・投稿データ・問い合わせ一覧を出力
+                </p>
+              </button>
+
+              <button
+                type="button"
+                className="rounded-[24px] border border-slate-200 bg-slate-50 p-5 text-left transition hover:border-emerald-300 hover:bg-emerald-50/70"
+              >
+                <div className="inline-flex rounded-2xl bg-emerald-100 p-3 text-emerald-700">
+                  <LayoutDashboard className="h-5 w-5" />
+                </div>
+                <p className="mt-4 text-base font-semibold text-slate-900">
+                  ダッシュボードのカスタマイズ
+                </p>
+                <p className="mt-2 text-sm text-slate-500">
+                  表示カードの並び替えや部門別プリセットを変更
+                </p>
+              </button>
+            </div>
+          </Panel>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export default function DXPortalMockup() {
   const [posts, setPosts] = useState(initialPosts);
   const [search, setSearch] = useState("");
@@ -383,6 +949,7 @@ export default function DXPortalMockup() {
   const [sortMode, setSortMode] = useState("latest");
   const [isComposerOpen, setIsComposerOpen] = useState(false);
   const [selectedVideo, setSelectedVideo] = useState(null);
+  const [screen, setScreen] = useState("portal");
   const [composer, setComposer] = useState({
     title: "",
     category: "AI活用",
@@ -412,14 +979,8 @@ export default function DXPortalMockup() {
     return Object.values(scoreMap).sort((a, b) => b.points - a.points);
   }, [posts]);
 
-  const totalLikes = useMemo(
-    () => posts.reduce((sum, p) => sum + p.likes, 0),
-    [posts]
-  );
-  const totalVideoPosts = useMemo(
-    () => posts.filter((post) => post.video).length,
-    [posts]
-  );
+  const totalLikes = useMemo(() => posts.reduce((sum, p) => sum + p.likes, 0), [posts]);
+  const totalVideoPosts = useMemo(() => posts.filter((post) => post.video).length, [posts]);
 
   const filteredPosts = useMemo(() => {
     const q = search.trim().toLowerCase();
@@ -459,6 +1020,7 @@ export default function DXPortalMockup() {
   };
 
   const openComposer = () => setIsComposerOpen(true);
+
   const closeComposer = () => {
     setIsComposerOpen(false);
     resetComposer();
@@ -532,6 +1094,10 @@ export default function DXPortalMockup() {
     closeComposer();
   };
 
+  if (screen === "admin") {
+    return <AdminDashboard onBack={() => setScreen("portal")} />;
+  }
+
   return (
     <>
       <div className="min-h-screen bg-[radial-gradient(circle_at_top_right,_rgba(59,130,246,0.15),_transparent_25%),radial-gradient(circle_at_top_left,_rgba(168,85,247,0.12),_transparent_25%),linear-gradient(to_bottom,_#f8fafc,_#eef2ff)] text-slate-900">
@@ -570,6 +1136,14 @@ export default function DXPortalMockup() {
                   <button className="inline-flex items-center gap-2 rounded-2xl border border-white/15 bg-white/10 px-4 py-3 text-sm font-medium text-white backdrop-blur transition hover:bg-white/15">
                     <Bell className="h-4 w-4" />
                     注目トピックを見る
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setScreen("admin")}
+                    className="inline-flex items-center gap-2 rounded-2xl border border-white/15 bg-white/10 px-4 py-3 text-sm font-medium text-white backdrop-blur transition hover:bg-white/15"
+                  >
+                    <Settings2 className="h-4 w-4" />
+                    管理メニュー
                   </button>
                 </div>
               </div>
@@ -635,20 +1209,30 @@ export default function DXPortalMockup() {
                     </p>
                   </div>
                   <div className="rounded-2xl bg-white p-4 shadow-sm">
-                    <p className="text-sm font-medium text-slate-900">想定用途</p>
+                    <p className="text-sm font-medium text-slate-900">管理メニュー</p>
                     <p className="mt-1 text-xs leading-5 text-slate-500">
-                      画面デモ、操作説明、改善前後の比較、引き継ぎ動画など
+                      利用状況・KPI・検索分析・セキュリティを一画面で確認できる管理画面へ遷移
                     </p>
                   </div>
                 </div>
-                <button
-                  type="button"
-                  onClick={openComposer}
-                  className="mt-5 inline-flex items-center gap-2 rounded-2xl bg-slate-900 px-4 py-3 text-sm font-medium text-white shadow-lg transition hover:translate-y-[-1px] hover:bg-slate-800"
-                >
-                  <Plus className="h-4 w-4" />
-                  投稿ウィンドウを開く
-                </button>
+                <div className="mt-5 flex flex-wrap gap-3">
+                  <button
+                    type="button"
+                    onClick={openComposer}
+                    className="inline-flex items-center gap-2 rounded-2xl bg-slate-900 px-4 py-3 text-sm font-medium text-white shadow-lg transition hover:translate-y-[-1px] hover:bg-slate-800"
+                  >
+                    <Plus className="h-4 w-4" />
+                    投稿ウィンドウを開く
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setScreen("admin")}
+                    className="inline-flex items-center gap-2 rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm font-medium text-slate-700 transition hover:bg-slate-50"
+                  >
+                    <Settings2 className="h-4 w-4" />
+                    管理画面を開く
+                  </button>
+                </div>
               </div>
             </motion.section>
 
@@ -726,16 +1310,11 @@ export default function DXPortalMockup() {
                       <Avatar label={post.avatar} />
                       <div className="min-w-0 flex-1">
                         <div className="flex flex-wrap items-center gap-2">
-                          <span className="font-medium text-slate-900">
-                            {post.author}
-                          </span>
-                          <span className="text-sm text-slate-500">
-                            {post.team}
-                          </span>
+                          <span className="font-medium text-slate-900">{post.author}</span>
+                          <span className="text-sm text-slate-500">{post.team}</span>
                           <span
                             className={`rounded-full border px-2.5 py-1 text-xs font-medium ${
-                              categoryStyles[post.category] ||
-                              categoryStyles["その他"]
+                              categoryStyles[post.category] || categoryStyles["その他"]
                             }`}
                           >
                             {post.category}
@@ -745,16 +1324,10 @@ export default function DXPortalMockup() {
                               動画あり
                             </span>
                           )}
-                          <span className="text-xs text-slate-400">
-                            {post.createdAt}
-                          </span>
+                          <span className="text-xs text-slate-400">{post.createdAt}</span>
                         </div>
-                        <h3 className="mt-3 text-lg font-semibold text-slate-900">
-                          {post.title}
-                        </h3>
-                        <p className="mt-2 text-sm leading-6 text-slate-600">
-                          {post.content}
-                        </p>
+                        <h3 className="mt-3 text-lg font-semibold text-slate-900">{post.title}</h3>
+                        <p className="mt-2 text-sm leading-6 text-slate-600">{post.content}</p>
 
                         <div className="mt-3 flex flex-wrap gap-2">
                           {post.tags.map((tag) => (
@@ -781,9 +1354,7 @@ export default function DXPortalMockup() {
                               }`}
                             >
                               <Heart
-                                className={`h-4 w-4 ${
-                                  post.likedByMe ? "fill-current" : ""
-                                }`}
+                                className={`h-4 w-4 ${post.likedByMe ? "fill-current" : ""}`}
                               />
                               {post.likes} いいね
                             </button>
@@ -826,9 +1397,7 @@ export default function DXPortalMockup() {
                 <div className="flex items-center justify-between">
                   <div>
                     <h2 className="text-xl font-semibold">ランキング</h2>
-                    <p className="mt-1 text-sm text-slate-500">
-                      いいね数に応じてポイントを集計
-                    </p>
+                    <p className="mt-1 text-sm text-slate-500">いいね数に応じてポイントを集計</p>
                   </div>
                   <div className="rounded-2xl bg-amber-50 p-2 text-amber-600">
                     <Trophy className="h-5 w-5" />
@@ -854,23 +1423,14 @@ export default function DXPortalMockup() {
                       >
                         {index + 1}
                       </div>
-                      <Avatar
-                        label={user.avatar}
-                        className="h-10 w-10 rounded-xl text-xs"
-                      />
+                      <Avatar label={user.avatar} className="h-10 w-10 rounded-xl text-xs" />
                       <div className="min-w-0 flex-1">
-                        <p className="truncate text-sm font-medium text-slate-900">
-                          {user.author}
-                        </p>
+                        <p className="truncate text-sm font-medium text-slate-900">{user.author}</p>
                         <p className="text-xs text-slate-500">{user.team}</p>
                       </div>
                       <div className="text-right">
-                        <p className="text-sm font-semibold text-slate-900">
-                          {user.points}pt
-                        </p>
-                        <p className="text-xs text-slate-500">
-                          {user.likes} いいね
-                        </p>
+                        <p className="text-sm font-semibold text-slate-900">{user.points}pt</p>
+                        <p className="text-xs text-slate-500">{user.likes} いいね</p>
                       </div>
                     </div>
                   ))}
@@ -881,9 +1441,7 @@ export default function DXPortalMockup() {
                 <div className="flex items-center justify-between">
                   <div>
                     <h2 className="text-xl font-semibold">注目トピック</h2>
-                    <p className="mt-1 text-sm text-slate-500">
-                      最近よく見られているテーマ
-                    </p>
+                    <p className="mt-1 text-sm text-slate-500">最近よく見られているテーマ</p>
                   </div>
                   <div className="rounded-2xl bg-rose-50 p-2 text-rose-600">
                     <Flame className="h-5 w-5" />
@@ -903,12 +1461,8 @@ export default function DXPortalMockup() {
                       className="flex w-full items-center justify-between rounded-2xl border border-slate-200 bg-white px-4 py-3 text-left transition hover:border-sky-200 hover:bg-sky-50/40"
                     >
                       <div>
-                        <p className="text-sm font-medium text-slate-900">
-                          {topic.label}
-                        </p>
-                        <p className="mt-1 text-xs text-slate-500">
-                          {topic.count}
-                        </p>
+                        <p className="text-sm font-medium text-slate-900">{topic.label}</p>
+                        <p className="mt-1 text-xs text-slate-500">{topic.count}</p>
                       </div>
                       <ChevronRight className="h-4 w-4 text-slate-400" />
                     </button>
@@ -927,14 +1481,24 @@ export default function DXPortalMockup() {
                   <li>• ランキングは投稿単位ではなく投稿者単位で集計</li>
                   <li>• 動画付き投稿も通常投稿と同様にポイント対象</li>
                 </ul>
-                <button
-                  type="button"
-                  onClick={openComposer}
-                  className="mt-5 inline-flex items-center gap-2 rounded-2xl bg-white px-4 py-3 text-sm font-medium text-slate-900 transition hover:translate-y-[-1px]"
-                >
-                  動画付き投稿を試す
-                  <ChevronRight className="h-4 w-4" />
-                </button>
+                <div className="mt-5 flex flex-wrap gap-3">
+                  <button
+                    type="button"
+                    onClick={openComposer}
+                    className="inline-flex items-center gap-2 rounded-2xl bg-white px-4 py-3 text-sm font-medium text-slate-900 transition hover:translate-y-[-1px]"
+                  >
+                    動画付き投稿を試す
+                    <ChevronRight className="h-4 w-4" />
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setScreen("admin")}
+                    className="inline-flex items-center gap-2 rounded-2xl border border-white/15 bg-white/10 px-4 py-3 text-sm font-medium text-white backdrop-blur transition hover:bg-white/15"
+                  >
+                    <Settings2 className="h-4 w-4" />
+                    管理画面へ
+                  </button>
+                </div>
               </section>
             </motion.aside>
           </div>
