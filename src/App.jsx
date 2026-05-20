@@ -23,8 +23,6 @@ import {
   Settings2,
   ArrowLeft,
   Users,
-  Activity,
-  Building2,
   Newspaper,
   Clock3,
   AlertTriangle,
@@ -42,7 +40,14 @@ import {
   Download,
   LayoutDashboard,
   BarChart3,
+  Menu,
 } from "lucide-react";
+
+const THEME = {
+  primary: "#004896",
+  secondary: "#003078",
+  deep: "#00114e",
+};
 
 const initialPosts = [
   {
@@ -64,7 +69,7 @@ const initialPosts = [
       size: "48.2MB",
       duration: "02:14",
       caption: "実際の申請〜承認までの流れを2分で確認できるデモ動画です。",
-      theme: "from-cyan-500 via-sky-500 to-indigo-600",
+      theme: "from-[#004896] via-[#003078] to-[#00114e]",
     },
   },
   {
@@ -100,9 +105,9 @@ const initialPosts = [
 ];
 
 const categoryStyles = {
-  AI活用: "bg-fuchsia-100 text-fuchsia-700 border-fuchsia-200",
-  自動化: "bg-cyan-100 text-cyan-700 border-cyan-200",
-  業務改善: "bg-emerald-100 text-emerald-700 border-emerald-200",
+  AI活用: "bg-[#e8eef9] text-[#003078] border-[#c8d7f0]",
+  自動化: "bg-[#edf3fb] text-[#004896] border-[#d6e3f6]",
+  業務改善: "bg-[#eef2f8] text-[#00114e] border-[#d4deec]",
   その他: "bg-slate-100 text-slate-700 border-slate-200",
 };
 
@@ -118,10 +123,10 @@ const adminMetrics = {
     activeRate: "+12% / 前週比",
     loginsTrend: [42, 58, 61, 73, 66, 84, 91],
     departmentUsage: [
-      { name: "営業", rate: 82, color: "bg-cyan-500" },
-      { name: "人事", rate: 68, color: "bg-fuchsia-500" },
-      { name: "経理", rate: 74, color: "bg-emerald-500" },
-      { name: "情シス", rate: 91, color: "bg-indigo-500" },
+      { name: "営業", rate: 82, color: "bg-[#004896]" },
+      { name: "人事", rate: 68, color: "bg-[#003078]" },
+      { name: "経理", rate: 74, color: "bg-[#00114e]" },
+      { name: "情シス", rate: 91, color: "bg-[#00256a]" },
     ],
   },
   content: {
@@ -181,22 +186,32 @@ const adminMetrics = {
   },
 };
 
+const adminSections = [
+  { id: "usage", label: "利用状況サマリー", icon: Users },
+  { id: "content", label: "コンテンツ管理状況", icon: Newspaper },
+  { id: "search", label: "検索・ナレッジ分析", icon: FileSearch },
+  { id: "dx", label: "DX推進KPI", icon: Target },
+  { id: "support", label: "通知・問い合わせ", icon: Mail },
+  { id: "security", label: "セキュリティ・運用", icon: Shield },
+  { id: "tools", label: "管理者向け便利機能", icon: Settings2 },
+];
+
 function StatCard({ icon, label, value, sub }) {
   return (
-    <div className="rounded-2xl border border-slate-200 bg-white/80 p-4 shadow-sm backdrop-blur">
+    <div className="rounded-2xl border border-slate-200 bg-white/90 p-4 shadow-sm backdrop-blur">
       <div className="flex items-start justify-between gap-3">
         <div>
           <p className="text-sm text-slate-500">{label}</p>
           <p className="mt-1 text-2xl font-semibold text-slate-900">{value}</p>
           <p className="mt-1 text-xs text-slate-500">{sub}</p>
         </div>
-        <div className="rounded-xl bg-slate-100 p-2 text-slate-700">{icon}</div>
+        <div className="rounded-xl bg-[#edf3fb] p-2 text-[#003078]">{icon}</div>
       </div>
     </div>
   );
 }
 
-function MetricCard({ icon, title, value, sub, accent = "from-sky-500 to-cyan-400" }) {
+function MetricCard({ icon, title, value, sub, accent = "from-[#004896] to-[#003078]" }) {
   return (
     <div className="rounded-[24px] border border-slate-200 bg-white p-4 shadow-sm">
       <div className="flex items-start justify-between gap-3">
@@ -211,22 +226,19 @@ function MetricCard({ icon, title, value, sub, accent = "from-sky-500 to-cyan-40
   );
 }
 
-function Panel({ title, description, icon, children, actionLabel }) {
+function Panel({ id, title, description, icon, children, actionLabel }) {
   return (
-    <section className="rounded-[28px] border border-slate-200/70 bg-white/90 p-5 shadow-xl backdrop-blur">
+    <section id={id} className="scroll-mt-28 rounded-[28px] border border-slate-200/70 bg-white/95 p-5 shadow-xl backdrop-blur">
       <div className="flex items-start justify-between gap-4">
         <div className="flex items-start gap-3">
-          <div className="rounded-2xl bg-slate-100 p-2 text-slate-700">{icon}</div>
+          <div className="rounded-2xl bg-[#edf3fb] p-2 text-[#003078]">{icon}</div>
           <div>
             <h3 className="text-lg font-semibold text-slate-900">{title}</h3>
             <p className="mt-1 text-sm text-slate-500">{description}</p>
           </div>
         </div>
         {actionLabel && (
-          <button
-            type="button"
-            className="rounded-2xl border border-slate-200 bg-white px-3 py-2 text-sm text-slate-600 transition hover:bg-slate-50"
-          >
+          <button type="button" className="rounded-2xl border border-[#d6e3f6] bg-white px-3 py-2 text-sm text-[#003078] transition hover:bg-[#edf3fb]">
             {actionLabel}
           </button>
         )}
@@ -236,7 +248,7 @@ function Panel({ title, description, icon, children, actionLabel }) {
   );
 }
 
-function ProgressBar({ label, value, color = "bg-sky-500" }) {
+function ProgressBar({ label, value, color = "bg-[#004896]" }) {
   return (
     <div>
       <div className="mb-2 flex items-center justify-between text-sm">
@@ -253,7 +265,7 @@ function ProgressBar({ label, value, color = "bg-sky-500" }) {
 function Avatar({ label, className = "" }) {
   return (
     <div
-      className={`flex h-11 w-11 items-center justify-center rounded-2xl bg-gradient-to-br from-indigo-500 via-sky-500 to-cyan-400 text-sm font-bold text-white shadow ${className}`}
+      className={`flex h-11 w-11 items-center justify-center rounded-2xl bg-gradient-to-br from-[#004896] via-[#003078] to-[#00114e] text-sm font-bold text-white shadow ${className}`}
     >
       {label}
     </div>
@@ -265,15 +277,11 @@ function VideoPreview({ video }) {
 
   return (
     <div className="mt-4 overflow-hidden rounded-[22px] border border-slate-200 bg-slate-50">
-      <div
-        className={`relative flex min-h-[168px] items-end overflow-hidden bg-gradient-to-br ${
-          video.theme || "from-sky-500 via-cyan-500 to-indigo-600"
-        } p-4 text-white`}
-      >
+      <div className={`relative flex min-h-[168px] items-end overflow-hidden bg-gradient-to-br ${video.theme || "from-[#004896] via-[#003078] to-[#00114e]"} p-4 text-white`}>
         <div className="absolute right-4 top-4 rounded-full bg-white/15 px-3 py-1 text-xs font-medium text-white backdrop-blur">
           動画付き投稿
         </div>
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,_rgba(255,255,255,0.25),_transparent_35%),radial-gradient(circle_at_bottom_right,_rgba(15,23,42,0.2),_transparent_40%)]" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,_rgba(255,255,255,0.18),_transparent_35%),radial-gradient(circle_at_bottom_right,_rgba(15,23,42,0.24),_transparent_40%)]" />
         <div className="relative flex w-full items-end justify-between gap-4">
           <div>
             <div className="inline-flex items-center gap-2 rounded-full bg-white/15 px-3 py-1 text-xs font-medium backdrop-blur">
@@ -285,7 +293,7 @@ function VideoPreview({ video }) {
           </div>
           <button
             type="button"
-            className="relative z-10 inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-white text-slate-900 shadow-lg transition hover:scale-105"
+            className="relative z-10 inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-white text-[#00114e] shadow-lg transition hover:scale-105"
           >
             <Play className="ml-1 h-5 w-5 fill-current" />
           </button>
@@ -296,25 +304,13 @@ function VideoPreview({ video }) {
           <FileVideo className="h-4 w-4 text-slate-400" />
           <span>{video.size}</span>
         </div>
-        <div className="rounded-full bg-slate-200 px-3 py-1 text-xs font-medium text-slate-700">
-          {video.duration}
-        </div>
+        <div className="rounded-full bg-[#edf3fb] px-3 py-1 text-xs font-medium text-[#003078]">{video.duration}</div>
       </div>
     </div>
   );
 }
 
-function ComposerModal({
-  open,
-  onClose,
-  composer,
-  setComposer,
-  currentUser,
-  onSubmit,
-  selectedVideo,
-  onVideoChange,
-  onVideoClear,
-}) {
+function ComposerModal({ open, onClose, composer, setComposer, currentUser, onSubmit, selectedVideo, onVideoChange, onVideoClear }) {
   return (
     <AnimatePresence>
       {open && (
@@ -333,16 +329,12 @@ function ComposerModal({
           >
             <div className="flex items-center justify-between border-b border-slate-200 px-6 py-5">
               <div>
-                <div className="inline-flex items-center gap-2 rounded-full bg-sky-50 px-3 py-1 text-xs font-medium text-sky-700">
+                <div className="inline-flex items-center gap-2 rounded-full bg-[#edf3fb] px-3 py-1 text-xs font-medium text-[#003078]">
                   <Sparkles className="h-3.5 w-3.5" />
                   新規投稿ウィンドウ
                 </div>
-                <h2 className="mt-3 text-2xl font-semibold text-slate-900">
-                  DXナレッジを投稿する
-                </h2>
-                <p className="mt-1 text-sm text-slate-500">
-                  テキストに加えて、動画付きで取り組み内容を共有できます。
-                </p>
+                <h2 className="mt-3 text-2xl font-semibold text-slate-900">DXナレッジを投稿する</h2>
+                <p className="mt-1 text-sm text-slate-500">テキストに加えて、動画付きで取り組み内容を共有できます。</p>
               </div>
               <button
                 type="button"
@@ -355,36 +347,26 @@ function ComposerModal({
 
             <div className="max-h-[calc(92vh-92px)] overflow-y-auto px-6 py-6">
               <div className="mb-5 rounded-[24px] border border-slate-200 bg-slate-50 px-4 py-4 text-sm text-slate-600">
-                投稿者:{" "}
-                <span className="font-medium text-slate-900">{currentUser.name}</span> /{" "}
-                {currentUser.team}
+                投稿者: <span className="font-medium text-slate-900">{currentUser.name}</span> / {currentUser.team}
               </div>
 
               <form onSubmit={onSubmit} className="space-y-5">
                 <div className="grid gap-4 md:grid-cols-[1.2fr_0.6fr]">
                   <div>
-                    <label className="mb-2 block text-sm font-medium text-slate-700">
-                      タイトル
-                    </label>
+                    <label className="mb-2 block text-sm font-medium text-slate-700">タイトル</label>
                     <input
                       value={composer.title}
-                      onChange={(e) =>
-                        setComposer((prev) => ({ ...prev, title: e.target.value }))
-                      }
+                      onChange={(e) => setComposer((prev) => ({ ...prev, title: e.target.value }))}
                       placeholder="例: 申請業務の自動化フロー紹介"
-                      className="w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm outline-none transition focus:border-sky-400 focus:bg-white focus:ring-4 focus:ring-sky-100"
+                      className="w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm outline-none transition focus:border-[#004896] focus:bg-white focus:ring-4 focus:ring-[#edf3fb]"
                     />
                   </div>
                   <div>
-                    <label className="mb-2 block text-sm font-medium text-slate-700">
-                      カテゴリ
-                    </label>
+                    <label className="mb-2 block text-sm font-medium text-slate-700">カテゴリ</label>
                     <select
                       value={composer.category}
-                      onChange={(e) =>
-                        setComposer((prev) => ({ ...prev, category: e.target.value }))
-                      }
-                      className="w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm outline-none transition focus:border-sky-400 focus:bg-white focus:ring-4 focus:ring-sky-100"
+                      onChange={(e) => setComposer((prev) => ({ ...prev, category: e.target.value }))}
+                      className="w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm outline-none transition focus:border-[#004896] focus:bg-white focus:ring-4 focus:ring-[#edf3fb]"
                     >
                       <option>AI活用</option>
                       <option>自動化</option>
@@ -395,57 +377,40 @@ function ComposerModal({
                 </div>
 
                 <div>
-                  <label className="mb-2 block text-sm font-medium text-slate-700">
-                    内容
-                  </label>
+                  <label className="mb-2 block text-sm font-medium text-slate-700">内容</label>
                   <textarea
                     rows={6}
                     value={composer.content}
-                    onChange={(e) =>
-                      setComposer((prev) => ({ ...prev, content: e.target.value }))
-                    }
+                    onChange={(e) => setComposer((prev) => ({ ...prev, content: e.target.value }))}
                     placeholder="取り組み内容、使ったツール、効果、注意点などを自由に記入してください。"
-                    className="w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm outline-none transition focus:border-sky-400 focus:bg-white focus:ring-4 focus:ring-sky-100"
+                    className="w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm outline-none transition focus:border-[#004896] focus:bg-white focus:ring-4 focus:ring-[#edf3fb]"
                   />
                 </div>
 
                 <div>
-                  <label className="mb-2 block text-sm font-medium text-slate-700">
-                    タグ（カンマ区切り）
-                  </label>
+                  <label className="mb-2 block text-sm font-medium text-slate-700">タグ（カンマ区切り）</label>
                   <input
                     value={composer.tags}
-                    onChange={(e) =>
-                      setComposer((prev) => ({ ...prev, tags: e.target.value }))
-                    }
+                    onChange={(e) => setComposer((prev) => ({ ...prev, tags: e.target.value }))}
                     placeholder="例: Power Automate, 生成AI, 標準化"
-                    className="w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm outline-none transition focus:border-sky-400 focus:bg-white focus:ring-4 focus:ring-sky-100"
+                    className="w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm outline-none transition focus:border-[#004896] focus:bg-white focus:ring-4 focus:ring-[#edf3fb]"
                   />
                 </div>
 
                 <div>
                   <div className="mb-2 flex items-center gap-2 text-sm font-medium text-slate-700">
-                    <Video className="h-4 w-4 text-sky-600" />
+                    <Video className="h-4 w-4 text-[#004896]" />
                     動画アップロードUI
                   </div>
 
-                  <label className="block cursor-pointer rounded-[26px] border-2 border-dashed border-sky-200 bg-sky-50/60 p-6 transition hover:border-sky-300 hover:bg-sky-50">
-                    <input
-                      type="file"
-                      accept="video/*"
-                      className="hidden"
-                      onChange={onVideoChange}
-                    />
+                  <label className="block cursor-pointer rounded-[26px] border-2 border-dashed border-[#c8d7f0] bg-[#f6f9fd] p-6 transition hover:border-[#004896] hover:bg-[#edf3fb]">
+                    <input type="file" accept="video/*" className="hidden" onChange={onVideoChange} />
                     <div className="flex flex-col items-center justify-center text-center">
-                      <div className="flex h-16 w-16 items-center justify-center rounded-3xl bg-white text-sky-600 shadow-sm">
+                      <div className="flex h-16 w-16 items-center justify-center rounded-3xl bg-white text-[#004896] shadow-sm">
                         <Upload className="h-7 w-7" />
                       </div>
-                      <p className="mt-4 text-base font-semibold text-slate-900">
-                        動画ファイルを選択
-                      </p>
-                      <p className="mt-2 text-sm text-slate-500">
-                        mp4 / mov / webm などを想定した投稿UIです（モックのため実アップロードは未接続）
-                      </p>
+                      <p className="mt-4 text-base font-semibold text-slate-900">動画ファイルを選択</p>
+                      <p className="mt-2 text-sm text-slate-500">mp4 / mov / webm などを想定した投稿UIです（モックのため実アップロードは未接続）</p>
                     </div>
                   </label>
 
@@ -453,16 +418,12 @@ function ComposerModal({
                     <div className="mt-4 rounded-[24px] border border-slate-200 bg-white p-4 shadow-sm">
                       <div className="flex flex-wrap items-center justify-between gap-3">
                         <div className="flex items-center gap-3">
-                          <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-violet-100 text-violet-700">
+                          <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-[#edf3fb] text-[#003078]">
                             <FileVideo className="h-5 w-5" />
                           </div>
                           <div>
-                            <p className="text-sm font-medium text-slate-900">
-                              {selectedVideo.name}
-                            </p>
-                            <p className="text-xs text-slate-500">
-                              {selectedVideo.sizeLabel}
-                            </p>
+                            <p className="text-sm font-medium text-slate-900">{selectedVideo.name}</p>
+                            <p className="text-xs text-slate-500">{selectedVideo.sizeLabel}</p>
                           </div>
                         </div>
                         <button
@@ -478,9 +439,7 @@ function ComposerModal({
                 </div>
 
                 <div className="flex flex-wrap items-center justify-between gap-3 rounded-[24px] border border-dashed border-slate-200 bg-slate-50 px-4 py-4">
-                  <p className="text-sm text-slate-500">
-                    投稿すると一覧の先頭に追加されます。動画はモックUIとしてカード表示されます。
-                  </p>
+                  <p className="text-sm text-slate-500">投稿すると一覧の先頭に追加されます。動画はモックUIとしてカード表示されます。</p>
                   <div className="flex gap-3">
                     <button
                       type="button"
@@ -491,7 +450,7 @@ function ComposerModal({
                     </button>
                     <button
                       type="submit"
-                      className="inline-flex items-center gap-2 rounded-2xl bg-slate-900 px-4 py-3 text-sm font-medium text-white shadow-lg transition hover:translate-y-[-1px] hover:bg-slate-800"
+                      className="inline-flex items-center gap-2 rounded-2xl bg-[#00114e] px-4 py-3 text-sm font-medium text-white shadow-lg transition hover:translate-y-[-1px] hover:bg-[#003078]"
                     >
                       <Send className="h-4 w-4" />
                       投稿する
@@ -507,16 +466,45 @@ function ComposerModal({
   );
 }
 
-function AdminDashboard({ onBack }) {
-  const { usage, content, search, dx, support, security } = adminMetrics;
+function AdminSidebarItem({ item, activeId, onClick }) {
+  const Icon = item.icon;
+  const active = activeId === item.id;
 
   return (
-    <div className="min-h-screen bg-[radial-gradient(circle_at_top_right,_rgba(59,130,246,0.12),_transparent_25%),radial-gradient(circle_at_top_left,_rgba(168,85,247,0.1),_transparent_30%),linear-gradient(to_bottom,_#f8fafc,_#eef2ff)] text-slate-900">
+    <button
+      type="button"
+      onClick={() => onClick(item.id)}
+      className={`flex w-full items-center gap-3 rounded-2xl px-4 py-3 text-left text-sm transition ${
+        active
+          ? "bg-[#00114e] text-white shadow"
+          : "text-slate-600 hover:bg-[#edf3fb] hover:text-[#00114e]"
+      }`}
+    >
+      <Icon className="h-4 w-4" />
+      <span className="font-medium">{item.label}</span>
+    </button>
+  );
+}
+
+function AdminDashboard({ onBack }) {
+  const { usage, content, search, dx, support, security } = adminMetrics;
+  const [activeSection, setActiveSection] = useState("usage");
+
+  const handleJump = (id) => {
+    setActiveSection(id);
+    const target = document.getElementById(id);
+    if (target) {
+      target.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+  };
+
+  return (
+    <div className="min-h-screen bg-[linear-gradient(to_bottom,_#f8fafc,_#f2f6fb)] text-slate-900">
       <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
         <motion.header
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
-          className="overflow-hidden rounded-[30px] border border-white/60 bg-slate-900 text-white shadow-2xl"
+          className="overflow-hidden rounded-[30px] border border-white/60 bg-[#00114e] text-white shadow-2xl"
         >
           <div className="grid gap-6 p-6 md:grid-cols-[1.3fr_0.7fr] md:p-8">
             <div>
@@ -525,38 +513,24 @@ function AdminDashboard({ onBack }) {
                 管理画面 / DXポータル運用ダッシュボード
               </div>
               <h1 className="mt-4 text-3xl font-semibold leading-tight md:text-5xl">
-                運用状況・KPI・
-                <span className="bg-gradient-to-r from-sky-300 to-cyan-200 bg-clip-text text-transparent">
-                  {" "}
-                  セキュリティ{" "}
-                </span>
-                を一画面で把握
+                左サイドバーで切り替える
+                <span className="bg-gradient-to-r from-white to-[#d7e6fb] bg-clip-text text-transparent"> 管理ダッシュボード </span>
               </h1>
               <p className="mt-4 max-w-2xl text-sm leading-6 text-slate-300 md:text-base">
-                管理メニューから遷移する管理者向けダッシュボードのモックです。利用状況、コンテンツ管理、検索分析、DX推進KPI、通知・問い合わせ、セキュリティ運用、便利機能を1画面に集約しています。
+                管理機能を左サイドバーに整理したモックです。利用状況、コンテンツ、検索分析、KPI、通知、セキュリティ、便利機能へすばやく移動できます。
               </p>
               <div className="mt-6 flex flex-wrap gap-3">
                 <button
                   type="button"
                   onClick={onBack}
-                  className="inline-flex items-center gap-2 rounded-2xl bg-white px-4 py-3 text-sm font-medium text-slate-900 shadow-lg transition hover:translate-y-[-1px]"
+                  className="inline-flex items-center gap-2 rounded-2xl bg-white px-4 py-3 text-sm font-medium text-[#00114e] shadow-lg transition hover:translate-y-[-1px]"
                 >
                   <ArrowLeft className="h-4 w-4" />
                   ポータルへ戻る
                 </button>
-                <button
-                  type="button"
-                  className="inline-flex items-center gap-2 rounded-2xl border border-white/15 bg-white/10 px-4 py-3 text-sm font-medium text-white backdrop-blur transition hover:bg-white/15"
-                >
+                <button type="button" className="inline-flex items-center gap-2 rounded-2xl border border-white/15 bg-white/10 px-4 py-3 text-sm font-medium text-white backdrop-blur transition hover:bg-white/15">
                   <Megaphone className="h-4 w-4" />
                   ワンクリックお知らせ投稿
-                </button>
-                <button
-                  type="button"
-                  className="inline-flex items-center gap-2 rounded-2xl border border-white/15 bg-white/10 px-4 py-3 text-sm font-medium text-white backdrop-blur transition hover:bg-white/15"
-                >
-                  <Download className="h-4 w-4" />
-                  CSVエクスポート
                 </button>
               </div>
             </div>
@@ -567,375 +541,320 @@ function AdminDashboard({ onBack }) {
                 title="アクティブユーザー数"
                 value={`${usage.activeUsers}人`}
                 sub={usage.activeRate}
-                accent="from-sky-500 to-cyan-400"
+                accent="from-[#004896] to-[#003078]"
               />
               <MetricCard
                 icon={<Target className="h-5 w-5" />}
                 title="DX施策の進捗率"
                 value={`${dx.progressRate}%`}
                 sub="今月の重点施策ベース"
-                accent="from-violet-500 to-fuchsia-500"
+                accent="from-[#003078] to-[#00114e]"
               />
               <MetricCard
                 icon={<Shield className="h-5 w-5" />}
                 title="システム障害アラート"
                 value={`${support.incidentAlerts}件`}
                 sub="要確認の障害通知"
-                accent="from-rose-500 to-orange-400"
+                accent="from-[#004896] to-[#00114e]"
               />
             </div>
           </div>
         </motion.header>
 
-        <div className="mt-6 grid gap-6 lg:grid-cols-2">
-          <Panel
-            title="利用状況サマリー"
-            description="アクティブユーザー、ログイン推移、部署別利用率を確認"
-            icon={<Users className="h-5 w-5" />}
-            actionLabel="詳細分析"
+        <div className="mt-6 grid gap-6 xl:grid-cols-[300px_minmax(0,1fr)]">
+          <motion.aside
+            initial={{ opacity: 0, x: -12 }}
+            animate={{ opacity: 1, x: 0 }}
+            className="xl:sticky xl:top-6 xl:self-start"
           >
-            <div className="grid gap-4 md:grid-cols-2">
-              <div className="rounded-[24px] border border-slate-200 bg-slate-50 p-4">
-                <p className="text-sm text-slate-500">ログイン数推移（7日間）</p>
-                <div className="mt-4 flex h-40 items-end gap-2">
-                  {usage.loginsTrend.map((value, idx) => (
-                    <div key={idx} className="flex flex-1 flex-col items-center gap-2">
-                      <div
-                        className="w-full rounded-t-2xl bg-gradient-to-t from-sky-500 to-cyan-300"
-                        style={{ height: `${value}%` }}
-                      />
-                      <span className="text-xs text-slate-400">D{idx + 1}</span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-              <div className="space-y-4 rounded-[24px] border border-slate-200 bg-slate-50 p-4">
-                <div className="rounded-2xl bg-white p-4 shadow-sm">
-                  <p className="text-sm text-slate-500">アクティブユーザー数</p>
-                  <p className="mt-1 text-3xl font-semibold text-slate-900">{usage.activeUsers}人</p>
-                  <p className="mt-1 text-xs text-emerald-600">{usage.activeRate}</p>
+            <div className="rounded-[28px] border border-slate-200/70 bg-white/95 p-5 shadow-xl backdrop-blur">
+              <div className="flex items-center gap-3">
+                <div className="rounded-2xl bg-[#edf3fb] p-2 text-[#003078]">
+                  <Menu className="h-5 w-5" />
                 </div>
                 <div>
-                  <p className="mb-3 text-sm font-medium text-slate-700">部署別利用率</p>
-                  <div className="space-y-3">
-                    {usage.departmentUsage.map((dept) => (
-                      <ProgressBar
-                        key={dept.name}
-                        label={dept.name}
-                        value={dept.rate}
-                        color={dept.color}
-                      />
-                    ))}
-                  </div>
+                  <h2 className="text-lg font-semibold text-slate-900">管理メニュー</h2>
+                  <p className="mt-1 text-sm text-slate-500">左サイドバーでセクション切替</p>
+                </div>
+              </div>
+
+              <div className="mt-5 space-y-2">
+                {adminSections.map((item) => (
+                  <AdminSidebarItem
+                    key={item.id}
+                    item={item}
+                    activeId={activeSection}
+                    onClick={handleJump}
+                  />
+                ))}
+              </div>
+
+              <div className="mt-6 rounded-[24px] border border-dashed border-[#d6e3f6] bg-[#f6f9fd] p-4">
+                <p className="text-sm font-medium text-slate-900">管理者向けショートカット</p>
+                <div className="mt-3 space-y-2">
+                  <button type="button" className="flex w-full items-center gap-2 rounded-2xl bg-white px-3 py-3 text-left text-sm text-slate-700 shadow-sm transition hover:bg-slate-50">
+                    <Megaphone className="h-4 w-4 text-[#004896]" />
+                    お知らせ投稿
+                  </button>
+                  <button type="button" className="flex w-full items-center gap-2 rounded-2xl bg-white px-3 py-3 text-left text-sm text-slate-700 shadow-sm transition hover:bg-slate-50">
+                    <Download className="h-4 w-4 text-[#003078]" />
+                    CSVエクスポート
+                  </button>
+                  <button type="button" className="flex w-full items-center gap-2 rounded-2xl bg-white px-3 py-3 text-left text-sm text-slate-700 shadow-sm transition hover:bg-slate-50">
+                    <LayoutDashboard className="h-4 w-4 text-[#00114e]" />
+                    ダッシュボード設定
+                  </button>
                 </div>
               </div>
             </div>
-          </Panel>
+          </motion.aside>
 
-          <Panel
-            title="コンテンツ管理状況"
-            description="人気記事、公開状況、更新アラート、承認待ちを把握"
-            icon={<Newspaper className="h-5 w-5" />}
-            actionLabel="コンテンツ一覧"
-          >
-            <div className="grid gap-4 md:grid-cols-2">
-              <div className="rounded-[24px] border border-slate-200 bg-slate-50 p-4">
-                <p className="text-sm font-medium text-slate-700">人気記事ランキング</p>
-                <div className="mt-4 space-y-3">
-                  {content.popularArticles.map((article, index) => (
-                    <div
-                      key={article.title}
-                      className="flex items-center justify-between rounded-2xl bg-white px-4 py-3 shadow-sm"
-                    >
-                      <div className="flex items-center gap-3">
-                        <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-amber-100 text-sm font-semibold text-amber-700">
-                          {index + 1}
-                        </div>
-                        <p className="text-sm font-medium text-slate-900">{article.title}</p>
-                      </div>
-                      <p className="text-xs text-slate-500">{article.views} views</p>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              <div className="space-y-4">
+          <div className="space-y-6">
+            <Panel
+              id="usage"
+              title="利用状況サマリー"
+              description="アクティブユーザー、ログイン推移、部署別利用率を確認"
+              icon={<Users className="h-5 w-5" />}
+              actionLabel="詳細分析"
+            >
+              <div className="grid gap-4 md:grid-cols-2">
                 <div className="rounded-[24px] border border-slate-200 bg-slate-50 p-4">
-                  <div className="flex items-center justify-between">
-                    <p className="text-sm font-medium text-slate-700">最近公開された記事</p>
-                    <Clock3 className="h-4 w-4 text-slate-400" />
-                  </div>
-                  <div className="mt-4 space-y-3">
-                    {content.latestArticles.map((article) => (
-                      <div
-                        key={article.title}
-                        className="rounded-2xl bg-white px-4 py-3 shadow-sm"
-                      >
-                        <p className="text-sm font-medium text-slate-900">{article.title}</p>
-                        <p className="mt-1 text-xs text-slate-500">公開日: {article.date}</p>
+                  <p className="text-sm text-slate-500">ログイン数推移（7日間）</p>
+                  <div className="mt-4 flex h-40 items-end gap-2">
+                    {usage.loginsTrend.map((value, idx) => (
+                      <div key={idx} className="flex flex-1 flex-col items-center gap-2">
+                        <div className="w-full rounded-t-2xl bg-gradient-to-t from-[#004896] to-[#8bb4e4]" style={{ height: `${value}%` }} />
+                        <span className="text-xs text-slate-400">D{idx + 1}</span>
                       </div>
                     ))}
                   </div>
                 </div>
-
-                <div className="grid gap-4 sm:grid-cols-2">
-                  <div className="rounded-[24px] border border-amber-200 bg-amber-50 p-4">
-                    <div className="flex items-center gap-2 text-amber-700">
-                      <AlertTriangle className="h-4 w-4" />
-                      <p className="text-sm font-medium">未更新記事アラート</p>
-                    </div>
-                    <ul className="mt-3 space-y-2 text-sm text-amber-900">
-                      {content.staleAlerts.map((item) => (
-                        <li key={item}>• {item}</li>
+                <div className="space-y-4 rounded-[24px] border border-slate-200 bg-slate-50 p-4">
+                  <div className="rounded-2xl bg-white p-4 shadow-sm">
+                    <p className="text-sm text-slate-500">アクティブユーザー数</p>
+                    <p className="mt-1 text-3xl font-semibold text-slate-900">{usage.activeUsers}人</p>
+                    <p className="mt-1 text-xs text-[#004896]">{usage.activeRate}</p>
+                  </div>
+                  <div>
+                    <p className="mb-3 text-sm font-medium text-slate-700">部署別利用率</p>
+                    <div className="space-y-3">
+                      {usage.departmentUsage.map((dept) => (
+                        <ProgressBar key={dept.name} label={dept.name} value={dept.rate} color={dept.color} />
                       ))}
-                    </ul>
-                  </div>
-
-                  <div className="rounded-[24px] border border-sky-200 bg-sky-50 p-4">
-                    <div className="flex items-center gap-2 text-sky-700">
-                      <CheckCircle2 className="h-4 w-4" />
-                      <p className="text-sm font-medium">承認待ち件数</p>
                     </div>
-                    <p className="mt-4 text-3xl font-semibold text-slate-900">
-                      {content.approvalPending}件
-                    </p>
-                    <p className="mt-1 text-xs text-slate-500">本日中の確認推奨</p>
                   </div>
                 </div>
               </div>
-            </div>
-          </Panel>
+            </Panel>
 
-          <Panel
-            title="検索・ナレッジ分析"
-            description="検索キーワード、未ヒットワード、人気カテゴリの可視化"
-            icon={<FileSearch className="h-5 w-5" />}
-            actionLabel="検索レポート"
-          >
-            <div className="grid gap-4 md:grid-cols-3">
-              <div className="rounded-[24px] border border-slate-200 bg-slate-50 p-4 md:col-span-1">
-                <p className="text-sm font-medium text-slate-700">検索キーワードランキング</p>
-                <div className="mt-4 space-y-3">
-                  {search.keywords.map((item, index) => (
-                    <div
-                      key={item.word}
-                      className="flex items-center justify-between rounded-2xl bg-white px-4 py-3 shadow-sm"
-                    >
-                      <div className="flex items-center gap-3">
-                        <span className="text-xs font-semibold text-slate-400">#{index + 1}</span>
-                        <p className="text-sm font-medium text-slate-900">{item.word}</p>
+            <Panel
+              id="content"
+              title="コンテンツ管理状況"
+              description="人気記事、公開状況、更新アラート、承認待ちを把握"
+              icon={<Newspaper className="h-5 w-5" />}
+              actionLabel="コンテンツ一覧"
+            >
+              <div className="grid gap-4 md:grid-cols-2">
+                <div className="rounded-[24px] border border-slate-200 bg-slate-50 p-4">
+                  <p className="text-sm font-medium text-slate-700">人気記事ランキング</p>
+                  <div className="mt-4 space-y-3">
+                    {content.popularArticles.map((article, index) => (
+                      <div key={article.title} className="flex items-center justify-between rounded-2xl bg-white px-4 py-3 shadow-sm">
+                        <div className="flex items-center gap-3">
+                          <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-[#edf3fb] text-sm font-semibold text-[#003078]">{index + 1}</div>
+                          <p className="text-sm font-medium text-slate-900">{article.title}</p>
+                        </div>
+                        <p className="text-xs text-slate-500">{article.views} views</p>
                       </div>
-                      <p className="text-xs text-slate-500">{item.count}回</p>
+                    ))}
+                  </div>
+                </div>
+                <div className="space-y-4">
+                  <div className="rounded-[24px] border border-slate-200 bg-slate-50 p-4">
+                    <div className="flex items-center justify-between">
+                      <p className="text-sm font-medium text-slate-700">最近公開された記事</p>
+                      <Clock3 className="h-4 w-4 text-slate-400" />
                     </div>
-                  ))}
+                    <div className="mt-4 space-y-3">
+                      {content.latestArticles.map((article) => (
+                        <div key={article.title} className="rounded-2xl bg-white px-4 py-3 shadow-sm">
+                          <p className="text-sm font-medium text-slate-900">{article.title}</p>
+                          <p className="mt-1 text-xs text-slate-500">公開日: {article.date}</p>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                  <div className="grid gap-4 sm:grid-cols-2">
+                    <div className="rounded-[24px] border border-[#d6e3f6] bg-[#f6f9fd] p-4">
+                      <div className="flex items-center gap-2 text-[#003078]">
+                        <AlertTriangle className="h-4 w-4" />
+                        <p className="text-sm font-medium">未更新記事アラート</p>
+                      </div>
+                      <ul className="mt-3 space-y-2 text-sm text-slate-700">
+                        {content.staleAlerts.map((item) => (
+                          <li key={item}>• {item}</li>
+                        ))}
+                      </ul>
+                    </div>
+                    <div className="rounded-[24px] border border-[#d6e3f6] bg-[#edf3fb] p-4">
+                      <div className="flex items-center gap-2 text-[#003078]">
+                        <CheckCircle2 className="h-4 w-4" />
+                        <p className="text-sm font-medium">承認待ち件数</p>
+                      </div>
+                      <p className="mt-4 text-3xl font-semibold text-slate-900">{content.approvalPending}件</p>
+                      <p className="mt-1 text-xs text-slate-500">本日中の確認推奨</p>
+                    </div>
+                  </div>
                 </div>
               </div>
+            </Panel>
 
-              <div className="rounded-[24px] border border-rose-200 bg-rose-50 p-4 md:col-span-1">
-                <p className="text-sm font-medium text-rose-700">
-                  「検索されたが記事がない」ワード
-                </p>
-                <div className="mt-4 flex flex-wrap gap-2">
-                  {search.noResultWords.map((word) => (
-                    <span
-                      key={word}
-                      className="rounded-full bg-white px-3 py-2 text-sm text-rose-700 shadow-sm"
-                    >
-                      {word}
-                    </span>
-                  ))}
+            <Panel
+              id="search"
+              title="検索・ナレッジ分析"
+              description="検索キーワード、未ヒットワード、人気カテゴリの可視化"
+              icon={<FileSearch className="h-5 w-5" />}
+              actionLabel="検索レポート"
+            >
+              <div className="grid gap-4 md:grid-cols-3">
+                <div className="rounded-[24px] border border-slate-200 bg-slate-50 p-4 md:col-span-1">
+                  <p className="text-sm font-medium text-slate-700">検索キーワードランキング</p>
+                  <div className="mt-4 space-y-3">
+                    {search.keywords.map((item, index) => (
+                      <div key={item.word} className="flex items-center justify-between rounded-2xl bg-white px-4 py-3 shadow-sm">
+                        <div className="flex items-center gap-3">
+                          <span className="text-xs font-semibold text-slate-400">#{index + 1}</span>
+                          <p className="text-sm font-medium text-slate-900">{item.word}</p>
+                        </div>
+                        <p className="text-xs text-slate-500">{item.count}回</p>
+                      </div>
+                    ))}
+                  </div>
                 </div>
-                <p className="mt-4 text-xs text-rose-700">
-                  未整備コンテンツの優先候補として活用
-                </p>
+                <div className="rounded-[24px] border border-[#d6e3f6] bg-[#f6f9fd] p-4 md:col-span-1">
+                  <p className="text-sm font-medium text-[#003078]">「検索されたが記事がない」ワード</p>
+                  <div className="mt-4 flex flex-wrap gap-2">
+                    {search.noResultWords.map((word) => (
+                      <span key={word} className="rounded-full bg-white px-3 py-2 text-sm text-[#003078] shadow-sm">
+                        {word}
+                      </span>
+                    ))}
+                  </div>
+                  <p className="mt-4 text-xs text-[#003078]">未整備コンテンツの優先候補として活用</p>
+                </div>
+                <div className="rounded-[24px] border border-slate-200 bg-slate-50 p-4 md:col-span-1">
+                  <p className="text-sm font-medium text-slate-700">よく見られているカテゴリ</p>
+                  <div className="mt-4 space-y-4">
+                    {search.categories.map((item) => (
+                      <ProgressBar key={item.name} label={item.name} value={item.views} color="bg-[#003078]" />
+                    ))}
+                  </div>
+                </div>
               </div>
+            </Panel>
 
-              <div className="rounded-[24px] border border-slate-200 bg-slate-50 p-4 md:col-span-1">
-                <p className="text-sm font-medium text-slate-700">よく見られているカテゴリ</p>
-                <div className="mt-4 space-y-4">
-                  {search.categories.map((item) => (
-                    <ProgressBar
-                      key={item.name}
-                      label={item.name}
-                      value={item.views}
-                      color="bg-violet-500"
-                    />
-                  ))}
+            <Panel
+              id="dx"
+              title="DX推進KPI"
+              description="AI利用率、業務改善・自動化件数、施策進捗率の追跡"
+              icon={<Target className="h-5 w-5" />}
+              actionLabel="KPI詳細"
+            >
+              <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+                <MetricCard icon={<Bot className="h-5 w-5" />} title="AI利用率" value={`${dx.aiUsageRate}%`} sub="部門横断の平均利用率" accent="from-[#004896] to-[#003078]" />
+                <MetricCard icon={<Workflow className="h-5 w-5" />} title="自動化件数" value={`${dx.automationCount}件`} sub="今年度累計" accent="from-[#003078] to-[#00114e]" />
+                <MetricCard icon={<TrendingUp className="h-5 w-5" />} title="業務改善件数" value={`${dx.improvementCount}件`} sub="投稿起点の改善を集計" accent="from-[#004896] to-[#00114e]" />
+                <MetricCard icon={<BarChart3 className="h-5 w-5" />} title="DX施策進捗率" value={`${dx.progressRate}%`} sub="ロードマップ達成度" accent="from-[#003078] to-[#004896]" />
+              </div>
+            </Panel>
+
+            <Panel
+              id="support"
+              title="通知・問い合わせ"
+              description="未読お知らせ、問い合わせ、障害アラートを集約"
+              icon={<Mail className="h-5 w-5" />}
+              actionLabel="通知センター"
+            >
+              <div className="grid gap-4 md:grid-cols-3">
+                <MetricCard icon={<Bell className="h-5 w-5" />} title="未読お知らせ数" value={`${support.unreadNotices}件`} sub="全社向け通知を含む" accent="from-[#004896] to-[#003078]" />
+                <MetricCard icon={<MessageCircleWarning className="h-5 w-5" />} title="未対応問い合わせ件数" value={`${support.openInquiries}件`} sub="48時間以内対応推奨" accent="from-[#003078] to-[#00114e]" />
+                <MetricCard icon={<Siren className="h-5 w-5" />} title="システム障害アラート" value={`${support.incidentAlerts}件`} sub="監視ツール連携を想定" accent="from-[#004896] to-[#00114e]" />
+              </div>
+            </Panel>
+
+            <Panel
+              id="security"
+              title="セキュリティ・運用"
+              description="不審ログイン、権限変更履歴、監査ログ確認"
+              icon={<Shield className="h-5 w-5" />}
+              actionLabel="監査ログへ"
+            >
+              <div className="grid gap-4 md:grid-cols-3">
+                <div className="rounded-[24px] border border-[#d6e3f6] bg-[#f6f9fd] p-4">
+                  <div className="flex items-center gap-2 text-[#003078]">
+                    <Shield className="h-4 w-4" />
+                    <p className="text-sm font-medium">不審ログイン検知</p>
+                  </div>
+                  <p className="mt-4 text-3xl font-semibold text-slate-900">{security.suspiciousLogins}件</p>
+                  <p className="mt-1 text-xs text-slate-500">海外IPアクセス / 深夜帯アクセスを検知</p>
+                </div>
+                <div className="rounded-[24px] border border-slate-200 bg-slate-50 p-4">
+                  <div className="flex items-center gap-2 text-slate-700">
+                    <UserCog className="h-4 w-4" />
+                    <p className="text-sm font-medium">権限変更履歴</p>
+                  </div>
+                  <ul className="mt-4 space-y-2 text-sm text-slate-700">
+                    {security.permissionChanges.map((item) => (
+                      <li key={item} className="rounded-2xl bg-white px-3 py-2 shadow-sm">{item}</li>
+                    ))}
+                  </ul>
+                </div>
+                <div className="rounded-[24px] border border-slate-200 bg-slate-50 p-4">
+                  <div className="flex items-center gap-2 text-slate-700">
+                    <FileSearch className="h-4 w-4" />
+                    <p className="text-sm font-medium">監査ログ確認</p>
+                  </div>
+                  <ul className="mt-4 space-y-2 text-sm text-slate-700">
+                    {security.auditLogs.map((item) => (
+                      <li key={item} className="rounded-2xl bg-white px-3 py-2 shadow-sm">{item}</li>
+                    ))}
+                  </ul>
                 </div>
               </div>
-            </div>
-          </Panel>
+            </Panel>
 
-          <Panel
-            title="DX推進KPI"
-            description="AI利用率、業務改善・自動化件数、施策進捗率の追跡"
-            icon={<Target className="h-5 w-5" />}
-            actionLabel="KPI詳細"
-          >
-            <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
-              <MetricCard
-                icon={<Bot className="h-5 w-5" />}
-                title="AI利用率"
-                value={`${dx.aiUsageRate}%`}
-                sub="部門横断の平均利用率"
-                accent="from-violet-500 to-fuchsia-500"
-              />
-              <MetricCard
-                icon={<Workflow className="h-5 w-5" />}
-                title="自動化件数"
-                value={`${dx.automationCount}件`}
-                sub="今年度累計"
-                accent="from-cyan-500 to-sky-500"
-              />
-              <MetricCard
-                icon={<TrendingUp className="h-5 w-5" />}
-                title="業務改善件数"
-                value={`${dx.improvementCount}件`}
-                sub="投稿起点の改善を集計"
-                accent="from-emerald-500 to-teal-500"
-              />
-              <MetricCard
-                icon={<BarChart3 className="h-5 w-5" />}
-                title="DX施策進捗率"
-                value={`${dx.progressRate}%`}
-                sub="ロードマップ達成度"
-                accent="from-amber-500 to-orange-500"
-              />
-            </div>
-          </Panel>
-
-          <Panel
-            title="通知・問い合わせ"
-            description="未読お知らせ、問い合わせ、障害アラートを集約"
-            icon={<Mail className="h-5 w-5" />}
-            actionLabel="通知センター"
-          >
-            <div className="grid gap-4 md:grid-cols-3">
-              <MetricCard
-                icon={<Bell className="h-5 w-5" />}
-                title="未読お知らせ数"
-                value={`${support.unreadNotices}件`}
-                sub="全社向け通知を含む"
-                accent="from-sky-500 to-cyan-400"
-              />
-              <MetricCard
-                icon={<MessageCircleWarning className="h-5 w-5" />}
-                title="未対応問い合わせ件数"
-                value={`${support.openInquiries}件`}
-                sub="48時間以内対応推奨"
-                accent="from-violet-500 to-fuchsia-500"
-              />
-              <MetricCard
-                icon={<Siren className="h-5 w-5" />}
-                title="システム障害アラート"
-                value={`${support.incidentAlerts}件`}
-                sub="監視ツール連携を想定"
-                accent="from-rose-500 to-orange-400"
-              />
-            </div>
-          </Panel>
-
-          <Panel
-            title="セキュリティ・運用"
-            description="不審ログイン、権限変更履歴、監査ログ確認"
-            icon={<Shield className="h-5 w-5" />}
-            actionLabel="監査ログへ"
-          >
-            <div className="grid gap-4 md:grid-cols-3">
-              <div className="rounded-[24px] border border-rose-200 bg-rose-50 p-4">
-                <div className="flex items-center gap-2 text-rose-700">
-                  <Shield className="h-4 w-4" />
-                  <p className="text-sm font-medium">不審ログイン検知</p>
-                </div>
-                <p className="mt-4 text-3xl font-semibold text-slate-900">
-                  {security.suspiciousLogins}件
-                </p>
-                <p className="mt-1 text-xs text-slate-500">
-                  海外IPアクセス / 深夜帯アクセスを検知
-                </p>
+            <Panel
+              id="tools"
+              title="管理者向け便利機能"
+              description="お知らせ投稿、CSV出力、ダッシュボード設定の入口"
+              icon={<Settings2 className="h-5 w-5" />}
+              actionLabel="設定"
+            >
+              <div className="grid gap-4 md:grid-cols-3">
+                <button type="button" className="rounded-[24px] border border-slate-200 bg-slate-50 p-5 text-left transition hover:border-[#c8d7f0] hover:bg-[#f6f9fd]">
+                  <div className="inline-flex rounded-2xl bg-[#edf3fb] p-3 text-[#004896]">
+                    <Megaphone className="h-5 w-5" />
+                  </div>
+                  <p className="mt-4 text-base font-semibold text-slate-900">ワンクリックお知らせ投稿</p>
+                  <p className="mt-2 text-sm text-slate-500">重要なお知らせをテンプレートから即時発信</p>
+                </button>
+                <button type="button" className="rounded-[24px] border border-slate-200 bg-slate-50 p-5 text-left transition hover:border-[#c8d7f0] hover:bg-[#f6f9fd]">
+                  <div className="inline-flex rounded-2xl bg-[#edf3fb] p-3 text-[#003078]">
+                    <Download className="h-5 w-5" />
+                  </div>
+                  <p className="mt-4 text-base font-semibold text-slate-900">CSVエクスポート</p>
+                  <p className="mt-2 text-sm text-slate-500">利用状況・投稿データ・問い合わせ一覧を出力</p>
+                </button>
+                <button type="button" className="rounded-[24px] border border-slate-200 bg-slate-50 p-5 text-left transition hover:border-[#c8d7f0] hover:bg-[#f6f9fd]">
+                  <div className="inline-flex rounded-2xl bg-[#edf3fb] p-3 text-[#00114e]">
+                    <LayoutDashboard className="h-5 w-5" />
+                  </div>
+                  <p className="mt-4 text-base font-semibold text-slate-900">ダッシュボードのカスタマイズ</p>
+                  <p className="mt-2 text-sm text-slate-500">表示カードの並び替えや部門別プリセットを変更</p>
+                </button>
               </div>
-
-              <div className="rounded-[24px] border border-slate-200 bg-slate-50 p-4">
-                <div className="flex items-center gap-2 text-slate-700">
-                  <UserCog className="h-4 w-4" />
-                  <p className="text-sm font-medium">権限変更履歴</p>
-                </div>
-                <ul className="mt-4 space-y-2 text-sm text-slate-700">
-                  {security.permissionChanges.map((item) => (
-                    <li key={item} className="rounded-2xl bg-white px-3 py-2 shadow-sm">
-                      {item}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-
-              <div className="rounded-[24px] border border-slate-200 bg-slate-50 p-4">
-                <div className="flex items-center gap-2 text-slate-700">
-                  <FileSearch className="h-4 w-4" />
-                  <p className="text-sm font-medium">監査ログ確認</p>
-                </div>
-                <ul className="mt-4 space-y-2 text-sm text-slate-700">
-                  {security.auditLogs.map((item) => (
-                    <li key={item} className="rounded-2xl bg-white px-3 py-2 shadow-sm">
-                      {item}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </div>
-          </Panel>
-
-          <Panel
-            title="管理者向け便利機能"
-            description="お知らせ投稿、CSV出力、ダッシュボード設定の入口"
-            icon={<Settings2 className="h-5 w-5" />}
-            actionLabel="設定"
-          >
-            <div className="grid gap-4 md:grid-cols-3">
-              <button
-                type="button"
-                className="rounded-[24px] border border-slate-200 bg-slate-50 p-5 text-left transition hover:border-sky-300 hover:bg-sky-50/70"
-              >
-                <div className="inline-flex rounded-2xl bg-sky-100 p-3 text-sky-700">
-                  <Megaphone className="h-5 w-5" />
-                </div>
-                <p className="mt-4 text-base font-semibold text-slate-900">
-                  ワンクリックお知らせ投稿
-                </p>
-                <p className="mt-2 text-sm text-slate-500">
-                  重要なお知らせをテンプレートから即時発信
-                </p>
-              </button>
-
-              <button
-                type="button"
-                className="rounded-[24px] border border-slate-200 bg-slate-50 p-5 text-left transition hover:border-violet-300 hover:bg-violet-50/70"
-              >
-                <div className="inline-flex rounded-2xl bg-violet-100 p-3 text-violet-700">
-                  <Download className="h-5 w-5" />
-                </div>
-                <p className="mt-4 text-base font-semibold text-slate-900">CSVエクスポート</p>
-                <p className="mt-2 text-sm text-slate-500">
-                  利用状況・投稿データ・問い合わせ一覧を出力
-                </p>
-              </button>
-
-              <button
-                type="button"
-                className="rounded-[24px] border border-slate-200 bg-slate-50 p-5 text-left transition hover:border-emerald-300 hover:bg-emerald-50/70"
-              >
-                <div className="inline-flex rounded-2xl bg-emerald-100 p-3 text-emerald-700">
-                  <LayoutDashboard className="h-5 w-5" />
-                </div>
-                <p className="mt-4 text-base font-semibold text-slate-900">
-                  ダッシュボードのカスタマイズ
-                </p>
-                <p className="mt-2 text-sm text-slate-500">
-                  表示カードの並び替えや部門別プリセットを変更
-                </p>
-              </button>
-            </div>
-          </Panel>
+            </Panel>
+          </div>
         </div>
       </div>
     </div>
@@ -985,8 +904,7 @@ export default function DXPortalMockup() {
   const filteredPosts = useMemo(() => {
     const q = search.trim().toLowerCase();
     let list = posts.filter((post) => {
-      const matchedCategory =
-        selectedCategory === "すべて" || post.category === selectedCategory;
+      const matchedCategory = selectedCategory === "すべて" || post.category === selectedCategory;
       const haystack = [
         post.title,
         post.content,
@@ -1004,9 +922,7 @@ export default function DXPortalMockup() {
     if (sortMode === "popular") {
       list = [...list].sort((a, b) => b.likes - a.likes);
     } else {
-      list = [...list].sort(
-        (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
-      );
+      list = [...list].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
     }
 
     return list;
@@ -1020,7 +936,6 @@ export default function DXPortalMockup() {
   };
 
   const openComposer = () => setIsComposerOpen(true);
-
   const closeComposer = () => {
     setIsComposerOpen(false);
     resetComposer();
@@ -1056,10 +971,10 @@ export default function DXPortalMockup() {
     if (!composer.title.trim() || !composer.content.trim()) return;
 
     const colorPalette = [
-      "from-sky-500 via-cyan-500 to-indigo-600",
-      "from-violet-500 via-fuchsia-500 to-pink-500",
-      "from-emerald-500 via-teal-500 to-cyan-600",
-      "from-amber-500 via-orange-500 to-rose-500",
+      "from-[#004896] via-[#003078] to-[#00114e]",
+      "from-[#003078] via-[#004896] to-[#00114e]",
+      "from-[#004896] via-[#00114e] to-[#003078]",
+      "from-[#003078] via-[#00114e] to-[#004896]",
     ];
 
     const newPost = {
@@ -1083,8 +998,7 @@ export default function DXPortalMockup() {
             name: selectedVideo.name,
             size: selectedVideo.sizeLabel,
             duration: "アップロード待ち",
-            caption:
-              "投稿ウィンドウから追加された動画UIです。実ファイル保存は今後の実装想定です。",
+            caption: "投稿ウィンドウから追加された動画UIです。実ファイル保存は今後の実装想定です。",
             theme: colorPalette[posts.length % colorPalette.length],
           }
         : null,
@@ -1100,12 +1014,12 @@ export default function DXPortalMockup() {
 
   return (
     <>
-      <div className="min-h-screen bg-[radial-gradient(circle_at_top_right,_rgba(59,130,246,0.15),_transparent_25%),radial-gradient(circle_at_top_left,_rgba(168,85,247,0.12),_transparent_25%),linear-gradient(to_bottom,_#f8fafc,_#eef2ff)] text-slate-900">
+      <div className="min-h-screen bg-[linear-gradient(to_bottom,_#f8fafc,_#f2f6fb)] text-slate-900">
         <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
           <motion.header
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
-            className="overflow-hidden rounded-[28px] border border-white/60 bg-slate-900 text-white shadow-2xl"
+            className="overflow-hidden rounded-[28px] border border-white/60 bg-[#00114e] text-white shadow-2xl"
           >
             <div className="grid gap-6 p-6 md:grid-cols-[1.4fr_0.8fr] md:p-8">
               <div>
@@ -1115,10 +1029,7 @@ export default function DXPortalMockup() {
                 </div>
                 <h1 className="max-w-3xl text-3xl font-semibold leading-tight md:text-5xl">
                   社員の知見が集まり、
-                  <span className="bg-gradient-to-r from-sky-300 to-cyan-200 bg-clip-text text-transparent">
-                    {" "}
-                    いいね{" "}
-                  </span>
+                  <span className="bg-gradient-to-r from-white to-[#d7e6fb] bg-clip-text text-transparent"> いいね </span>
                   で価値が見えるDXポータル
                 </h1>
                 <p className="mt-4 max-w-2xl text-sm leading-6 text-slate-300 md:text-base">
@@ -1128,7 +1039,7 @@ export default function DXPortalMockup() {
                   <button
                     type="button"
                     onClick={openComposer}
-                    className="inline-flex items-center gap-2 rounded-2xl bg-white px-4 py-3 text-sm font-medium text-slate-900 shadow-lg transition hover:translate-y-[-1px]"
+                    className="inline-flex items-center gap-2 rounded-2xl bg-white px-4 py-3 text-sm font-medium text-[#00114e] shadow-lg transition hover:translate-y-[-1px]"
                   >
                     <Plus className="h-4 w-4" />
                     新しく投稿する
@@ -1176,50 +1087,42 @@ export default function DXPortalMockup() {
               initial={{ opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.05 }}
-              className="rounded-[28px] border border-slate-200/70 bg-white/85 p-5 shadow-xl backdrop-blur"
+              className="rounded-[28px] border border-slate-200/70 bg-white/95 p-5 shadow-xl backdrop-blur"
             >
               <div className="flex items-center justify-between">
                 <div>
                   <h2 className="text-xl font-semibold">投稿クイックアクション</h2>
-                  <p className="mt-1 text-sm text-slate-500">
-                    新しい投稿は専用ウィンドウから入力するUIに変更しています。
-                  </p>
+                  <p className="mt-1 text-sm text-slate-500">新しい投稿は専用ウィンドウから入力するUIに変更しています。</p>
                 </div>
-                <div className="rounded-2xl bg-sky-50 p-2 text-sky-600">
+                <div className="rounded-2xl bg-[#edf3fb] p-2 text-[#003078]">
                   <Clapperboard className="h-5 w-5" />
                 </div>
               </div>
 
               <div className="mt-5 rounded-[26px] border border-slate-200 bg-slate-50 p-5">
-                <div className="inline-flex items-center gap-2 rounded-full bg-white px-3 py-1 text-xs font-medium text-slate-700 shadow-sm">
-                  <Video className="h-3.5 w-3.5 text-sky-600" />
+                <div className="inline-flex items-center gap-2 rounded-full bg-white px-3 py-1 text-xs font-medium text-[#003078] shadow-sm">
+                  <Video className="h-3.5 w-3.5 text-[#004896]" />
                   動画投稿対応UI
                 </div>
-                <h3 className="mt-4 text-lg font-semibold text-slate-900">
-                  手順説明やデモ動画を一緒に共有
-                </h3>
+                <h3 className="mt-4 text-lg font-semibold text-slate-900">手順説明やデモ動画を一緒に共有</h3>
                 <p className="mt-2 text-sm leading-6 text-slate-600">
                   投稿ウィンドウでは、タイトル・内容・タグに加えて動画ファイルを選べるアップロードUIを用意。投稿一覧では動画付きカードとして表示され、現場向けのデモ共有をイメージできます。
                 </p>
                 <div className="mt-5 grid gap-3 sm:grid-cols-2">
                   <div className="rounded-2xl bg-white p-4 shadow-sm">
                     <p className="text-sm font-medium text-slate-900">投稿方法</p>
-                    <p className="mt-1 text-xs leading-5 text-slate-500">
-                      「新しく投稿する」ボタン → モーダル起動 → テキスト入力 → 動画選択 → 投稿
-                    </p>
+                    <p className="mt-1 text-xs leading-5 text-slate-500">「新しく投稿する」ボタン → モーダル起動 → テキスト入力 → 動画選択 → 投稿</p>
                   </div>
                   <div className="rounded-2xl bg-white p-4 shadow-sm">
                     <p className="text-sm font-medium text-slate-900">管理メニュー</p>
-                    <p className="mt-1 text-xs leading-5 text-slate-500">
-                      利用状況・KPI・検索分析・セキュリティを一画面で確認できる管理画面へ遷移
-                    </p>
+                    <p className="mt-1 text-xs leading-5 text-slate-500">利用状況・KPI・検索分析・セキュリティを一画面で確認できる管理画面へ遷移</p>
                   </div>
                 </div>
                 <div className="mt-5 flex flex-wrap gap-3">
                   <button
                     type="button"
                     onClick={openComposer}
-                    className="inline-flex items-center gap-2 rounded-2xl bg-slate-900 px-4 py-3 text-sm font-medium text-white shadow-lg transition hover:translate-y-[-1px] hover:bg-slate-800"
+                    className="inline-flex items-center gap-2 rounded-2xl bg-[#00114e] px-4 py-3 text-sm font-medium text-white shadow-lg transition hover:translate-y-[-1px] hover:bg-[#003078]"
                   >
                     <Plus className="h-4 w-4" />
                     投稿ウィンドウを開く
@@ -1227,7 +1130,7 @@ export default function DXPortalMockup() {
                   <button
                     type="button"
                     onClick={() => setScreen("admin")}
-                    className="inline-flex items-center gap-2 rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm font-medium text-slate-700 transition hover:bg-slate-50"
+                    className="inline-flex items-center gap-2 rounded-2xl border border-[#d6e3f6] bg-white px-4 py-3 text-sm font-medium text-[#003078] transition hover:bg-[#edf3fb]"
                   >
                     <Settings2 className="h-4 w-4" />
                     管理画面を開く
@@ -1240,15 +1143,13 @@ export default function DXPortalMockup() {
               initial={{ opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.1 }}
-              className="rounded-[28px] border border-slate-200/70 bg-white/85 p-5 shadow-xl backdrop-blur"
+              className="rounded-[28px] border border-slate-200/70 bg-white/95 p-5 shadow-xl backdrop-blur"
             >
               <div className="flex flex-col gap-4">
                 <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
                   <div>
                     <h2 className="text-xl font-semibold">投稿フィード</h2>
-                    <p className="mt-1 text-sm text-slate-500">
-                      社内のDXナレッジを検索・閲覧できます。動画付き投稿もカードで表示します。
-                    </p>
+                    <p className="mt-1 text-sm text-slate-500">社内のDXナレッジを検索・閲覧できます。動画付き投稿もカードで表示します。</p>
                   </div>
                   <div className="flex items-center gap-2 rounded-2xl border border-slate-200 bg-slate-50 px-3 py-2 text-sm text-slate-500">
                     <Filter className="h-4 w-4" />
@@ -1263,13 +1164,13 @@ export default function DXPortalMockup() {
                       value={search}
                       onChange={(e) => setSearch(e.target.value)}
                       placeholder="タイトル・本文・タグ・投稿者・動画名で検索"
-                      className="w-full rounded-2xl border border-slate-200 bg-slate-50 py-3 pl-10 pr-4 text-sm outline-none transition focus:border-sky-400 focus:bg-white focus:ring-4 focus:ring-sky-100"
+                      className="w-full rounded-2xl border border-slate-200 bg-slate-50 py-3 pl-10 pr-4 text-sm outline-none transition focus:border-[#004896] focus:bg-white focus:ring-4 focus:ring-[#edf3fb]"
                     />
                   </div>
                   <select
                     value={sortMode}
                     onChange={(e) => setSortMode(e.target.value)}
-                    className="rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm outline-none transition focus:border-sky-400 focus:bg-white focus:ring-4 focus:ring-sky-100"
+                    className="rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm outline-none transition focus:border-[#004896] focus:bg-white focus:ring-4 focus:ring-[#edf3fb]"
                   >
                     <option value="latest">新着順</option>
                     <option value="popular">人気順</option>
@@ -1286,8 +1187,8 @@ export default function DXPortalMockup() {
                         onClick={() => setSelectedCategory(category)}
                         className={`rounded-full px-4 py-2 text-sm transition ${
                           active
-                            ? "bg-slate-900 text-white shadow"
-                            : "border border-slate-200 bg-white text-slate-600 hover:bg-slate-50"
+                            ? "bg-[#00114e] text-white shadow"
+                            : "border border-slate-200 bg-white text-slate-600 hover:bg-[#edf3fb] hover:text-[#00114e]"
                         }`}
                       >
                         {category}
@@ -1320,7 +1221,7 @@ export default function DXPortalMockup() {
                             {post.category}
                           </span>
                           {post.video && (
-                            <span className="rounded-full border border-violet-200 bg-violet-50 px-2.5 py-1 text-xs font-medium text-violet-700">
+                            <span className="rounded-full border border-[#c8d7f0] bg-[#edf3fb] px-2.5 py-1 text-xs font-medium text-[#003078]">
                               動画あり
                             </span>
                           )}
@@ -1331,10 +1232,7 @@ export default function DXPortalMockup() {
 
                         <div className="mt-3 flex flex-wrap gap-2">
                           {post.tags.map((tag) => (
-                            <span
-                              key={tag}
-                              className="rounded-full bg-slate-100 px-2.5 py-1 text-xs text-slate-600"
-                            >
+                            <span key={tag} className="rounded-full bg-slate-100 px-2.5 py-1 text-xs text-slate-600">
                               #{tag}
                             </span>
                           ))}
@@ -1349,13 +1247,11 @@ export default function DXPortalMockup() {
                               onClick={() => handleLike(post.id)}
                               className={`inline-flex items-center gap-2 rounded-xl px-3 py-2 transition ${
                                 post.likedByMe
-                                  ? "bg-rose-50 text-rose-600"
+                                  ? "bg-[#edf3fb] text-[#003078]"
                                   : "bg-slate-50 text-slate-600 hover:bg-slate-100"
                               }`}
                             >
-                              <Heart
-                                className={`h-4 w-4 ${post.likedByMe ? "fill-current" : ""}`}
-                              />
+                              <Heart className={`h-4 w-4 ${post.likedByMe ? "fill-current" : ""}`} />
                               {post.likes} いいね
                             </button>
                             <div className="inline-flex items-center gap-2 rounded-xl bg-slate-50 px-3 py-2">
@@ -1364,7 +1260,7 @@ export default function DXPortalMockup() {
                             </div>
                           </div>
 
-                          <div className="inline-flex items-center gap-2 rounded-xl bg-amber-50 px-3 py-2 text-sm font-medium text-amber-700">
+                          <div className="inline-flex items-center gap-2 rounded-xl bg-[#edf3fb] px-3 py-2 text-sm font-medium text-[#003078]">
                             <Star className="h-4 w-4" />
                             この投稿の獲得ポイント: {post.likes * 10}pt
                           </div>
@@ -1376,12 +1272,8 @@ export default function DXPortalMockup() {
 
                 {filteredPosts.length === 0 && (
                   <div className="rounded-[24px] border border-dashed border-slate-300 bg-slate-50 p-8 text-center">
-                    <p className="text-base font-medium text-slate-700">
-                      該当する投稿が見つかりませんでした
-                    </p>
-                    <p className="mt-2 text-sm text-slate-500">
-                      検索条件やカテゴリを変えてみてください。
-                    </p>
+                    <p className="text-base font-medium text-slate-700">該当する投稿が見つかりませんでした</p>
+                    <p className="mt-2 text-sm text-slate-500">検索条件やカテゴリを変えてみてください。</p>
                   </div>
                 )}
               </div>
@@ -1393,13 +1285,13 @@ export default function DXPortalMockup() {
               transition={{ delay: 0.15 }}
               className="space-y-6"
             >
-              <section className="rounded-[28px] border border-slate-200/70 bg-white/85 p-5 shadow-xl backdrop-blur">
+              <section className="rounded-[28px] border border-slate-200/70 bg-white/95 p-5 shadow-xl backdrop-blur">
                 <div className="flex items-center justify-between">
                   <div>
                     <h2 className="text-xl font-semibold">ランキング</h2>
                     <p className="mt-1 text-sm text-slate-500">いいね数に応じてポイントを集計</p>
                   </div>
-                  <div className="rounded-2xl bg-amber-50 p-2 text-amber-600">
+                  <div className="rounded-2xl bg-[#edf3fb] p-2 text-[#003078]">
                     <Trophy className="h-5 w-5" />
                   </div>
                 </div>
@@ -1410,17 +1302,15 @@ export default function DXPortalMockup() {
                       key={user.author}
                       className="flex items-center gap-3 rounded-2xl border border-slate-200 bg-white p-3"
                     >
-                      <div
-                        className={`flex h-8 w-8 items-center justify-center rounded-xl text-sm font-semibold ${
-                          index === 0
-                            ? "bg-amber-100 text-amber-700"
-                            : index === 1
-                            ? "bg-slate-200 text-slate-700"
-                            : index === 2
-                            ? "bg-orange-100 text-orange-700"
-                            : "bg-slate-100 text-slate-600"
-                        }`}
-                      >
+                      <div className={`flex h-8 w-8 items-center justify-center rounded-xl text-sm font-semibold ${
+                        index === 0
+                          ? "bg-[#edf3fb] text-[#003078]"
+                          : index === 1
+                          ? "bg-slate-200 text-slate-700"
+                          : index === 2
+                          ? "bg-[#f6f9fd] text-[#00114e]"
+                          : "bg-slate-100 text-slate-600"
+                      }`}>
                         {index + 1}
                       </div>
                       <Avatar label={user.avatar} className="h-10 w-10 rounded-xl text-xs" />
@@ -1437,13 +1327,13 @@ export default function DXPortalMockup() {
                 </div>
               </section>
 
-              <section className="rounded-[28px] border border-slate-200/70 bg-white/85 p-5 shadow-xl backdrop-blur">
+              <section className="rounded-[28px] border border-slate-200/70 bg-white/95 p-5 shadow-xl backdrop-blur">
                 <div className="flex items-center justify-between">
                   <div>
                     <h2 className="text-xl font-semibold">注目トピック</h2>
                     <p className="mt-1 text-sm text-slate-500">最近よく見られているテーマ</p>
                   </div>
-                  <div className="rounded-2xl bg-rose-50 p-2 text-rose-600">
+                  <div className="rounded-2xl bg-[#edf3fb] p-2 text-[#003078]">
                     <Flame className="h-5 w-5" />
                   </div>
                 </div>
@@ -1458,7 +1348,7 @@ export default function DXPortalMockup() {
                     <button
                       type="button"
                       key={topic.label}
-                      className="flex w-full items-center justify-between rounded-2xl border border-slate-200 bg-white px-4 py-3 text-left transition hover:border-sky-200 hover:bg-sky-50/40"
+                      className="flex w-full items-center justify-between rounded-2xl border border-slate-200 bg-white px-4 py-3 text-left transition hover:border-[#c8d7f0] hover:bg-[#f6f9fd]"
                     >
                       <div>
                         <p className="text-sm font-medium text-slate-900">{topic.label}</p>
@@ -1470,7 +1360,7 @@ export default function DXPortalMockup() {
                 </div>
               </section>
 
-              <section className="rounded-[28px] border border-slate-200/70 bg-slate-900 p-5 text-white shadow-xl">
+              <section className="rounded-[28px] border border-slate-200/70 bg-[#00114e] p-5 text-white shadow-xl">
                 <p className="inline-flex items-center gap-2 rounded-full bg-white/10 px-3 py-1 text-xs text-white/90">
                   <Star className="h-4 w-4" />
                   ポイント設計の例
@@ -1485,7 +1375,7 @@ export default function DXPortalMockup() {
                   <button
                     type="button"
                     onClick={openComposer}
-                    className="inline-flex items-center gap-2 rounded-2xl bg-white px-4 py-3 text-sm font-medium text-slate-900 transition hover:translate-y-[-1px]"
+                    className="inline-flex items-center gap-2 rounded-2xl bg-white px-4 py-3 text-sm font-medium text-[#00114e] transition hover:translate-y-[-1px]"
                   >
                     動画付き投稿を試す
                     <ChevronRight className="h-4 w-4" />
