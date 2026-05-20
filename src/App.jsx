@@ -59,13 +59,6 @@ const initialPosts = [
     comments: 11,
     createdAt: "2026-05-12",
     likedByMe: true,
-    video: {
-      name: "FAQボット回答例_画面収録.mp4",
-      size: "32.6MB",
-      duration: "01:36",
-      caption: "社内質問に対する回答の動きと検索の精度感が分かる試作動画です。",
-      theme: "from-fuchsia-500 via-violet-500 to-indigo-600",
-    },
   },
   {
     id: 3,
@@ -81,16 +74,8 @@ const initialPosts = [
     comments: 3,
     createdAt: "2026-05-10",
     likedByMe: false,
-    video: {
-      name: "請求書チェック手順紹介.mp4",
-      size: "21.4MB",
-      duration: "00:58",
-      caption: "テンプレート入力から差異チェック完了までの手順を短くまとめています。",
-      theme: "from-emerald-500 via-teal-500 to-cyan-600",
-    },
   },
 ];
-
 const categoryStyles = {
   AI活用: "bg-fuchsia-100 text-fuchsia-700 border-fuchsia-200",
   自動化: "bg-cyan-100 text-cyan-700 border-cyan-200",
